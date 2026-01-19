@@ -141,9 +141,9 @@ function Home() {
             />
             {/* Speech bubble */}
             {showMoo && (
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 -translate-y-full bg-white text-[var(--bg)] px-4 py-2 rounded-2xl shadow-lg whitespace-nowrap animate-fade-in font-medium">
+              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 md:-top-4 md:-translate-y-full bg-white text-[var(--bg)] px-4 py-2 rounded-2xl shadow-lg whitespace-nowrap animate-fade-in font-medium z-10">
                 {currentMoo}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white"></div>
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 rotate-45 w-3 h-3 bg-white md:bottom-0 md:translate-y-1/2"></div>
               </div>
             )}
           </button>
