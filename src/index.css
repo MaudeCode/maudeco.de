@@ -1,25 +1,28 @@
 @import 'tailwindcss';
 
 :root {
-  /* Colors inspired by my avatar 🐄 */
-  --bg: #f0fdf4;                    /* Soft mint background */
-  --bg-darker: #dcfce7;             /* Slightly deeper mint */
-  --bg-card: #ffffff;               /* Clean white cards */
-  --bg-elevated: #f8fafc;           /* Subtle elevation */
+  /* Softer colors - same vibe, gentler on eyes 🐄 */
+  --bg: #1a2e1f;                    /* Deep forest green */
+  --bg-darker: #152518;             /* Even deeper */
+  --bg-card: #243328;               /* Card background */
+  --bg-elevated: #2d3f32;           /* Elevated surfaces */
   
-  --accent: #ec4899;                /* Pink like my flower 🌸 */
-  --accent-soft: #fbcfe8;           /* Soft pink */
-  --accent-glow: rgba(236, 72, 153, 0.2);
+  --accent: #f472b6;                /* Soft pink like my flower 🌸 */
+  --accent-soft: rgba(244, 114, 182, 0.15);
+  --accent-glow: rgba(244, 114, 182, 0.25);
   
-  --brown: #92400e;                 /* Brown like my spots */
-  --brown-soft: #fef3c7;            /* Cream like my fur */
+  --mint: #86efac;                  /* Mint green accent */
+  --mint-soft: rgba(134, 239, 172, 0.15);
   
-  --text: #1e293b;                  /* Dark slate for readability */
-  --text-dim: #64748b;              /* Muted text */
-  --text-muted: #94a3b8;            /* Even more muted */
+  --cream: #fef3c7;                 /* Cream like my fur */
+  --cream-soft: rgba(254, 243, 199, 0.1);
   
-  --border: #d1fae5;                /* Soft green border */
-  --success: #22c55e;               /* Green for status */
+  --text: #f1f5f9;                  /* Light text */
+  --text-dim: #a7c4b5;              /* Muted mint-tinted text */
+  --text-muted: #6b8f7a;            /* Even more muted */
+  
+  --border: #3d5a45;                /* Soft green border */
+  --success: #4ade80;               /* Green for status */
 }
 
 * {
@@ -48,15 +51,15 @@ body {
 /* Soft gradient background */
 .gradient-bg {
   background: 
-    radial-gradient(ellipse at top, rgba(236, 72, 153, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom right, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at top, rgba(244, 114, 182, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(134, 239, 172, 0.05) 0%, transparent 50%),
     linear-gradient(to bottom, var(--bg), var(--bg-darker));
   min-height: 100vh;
 }
 
 /* Glow effect for the logo */
 .logo-glow {
-  filter: drop-shadow(0 0 30px var(--accent-glow));
+  filter: drop-shadow(0 0 40px var(--accent-glow));
   animation: float 6s ease-in-out infinite;
 }
 
@@ -68,12 +71,11 @@ body {
 /* Card hover effect */
 .card-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(236, 72, 153, 0.1), 0 8px 16px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   border-color: var(--accent);
 }
 
@@ -107,15 +109,9 @@ body {
   50% { opacity: 0.5; }
 }
 
-/* Decorative dots pattern (like in my avatar!) */
-.dots-pattern {
-  background-image: radial-gradient(var(--accent-soft) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-
 /* Cute button style */
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent) 0%, #db2777 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, #ec4899 100%);
   color: white;
   border: none;
   padding: 12px 28px;

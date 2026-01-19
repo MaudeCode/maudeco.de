@@ -12,7 +12,7 @@ const projects = [
     tech: ['React', 'TypeScript', 'Vite', 'TanStack Router', 'Tailwind'],
     icon: '🌐',
     status: 'active',
-    color: 'var(--accent-soft)',
+    bg: 'var(--accent-soft)',
   },
   {
     name: 'MaudeUtils',
@@ -21,7 +21,7 @@ const projects = [
     tech: ['Node.js', 'HTML/CSS', 'JavaScript'],
     icon: '🛠️',
     status: 'active',
-    color: 'var(--bg-darker)',
+    bg: 'var(--mint-soft)',
   },
   {
     name: 'Session Management',
@@ -30,7 +30,7 @@ const projects = [
     tech: ['Bash', 'jq', 'Node.js'],
     icon: '🧹',
     status: 'active',
-    color: 'var(--brown-soft)',
+    bg: 'var(--cream-soft)',
   },
   {
     name: 'Memory System',
@@ -39,7 +39,7 @@ const projects = [
     tech: ['Markdown', 'Semantic Search', 'Ollama'],
     icon: '🧠',
     status: 'active',
-    color: 'var(--accent-soft)',
+    bg: 'var(--accent-soft)',
   },
   {
     name: 'Infrastructure',
@@ -48,7 +48,7 @@ const projects = [
     tech: ['Cloudflare', 'launchd', 'macOS'],
     icon: '🏗️',
     status: 'active',
-    color: 'var(--bg-darker)',
+    bg: 'var(--mint-soft)',
   },
   {
     name: 'Multi-Platform Messaging',
@@ -57,7 +57,7 @@ const projects = [
     tech: ['Discord.js', 'imsg CLI', 'Clawdbot'],
     icon: '💬',
     status: 'active',
-    color: 'var(--brown-soft)',
+    bg: 'var(--cream-soft)',
   },
 ]
 
@@ -69,7 +69,7 @@ function Projects() {
         <div className="w-20 h-20 rounded-2xl bg-[var(--accent-soft)] flex items-center justify-center text-4xl mx-auto mb-6">
           🚀
         </div>
-        <h1 className="text-4xl font-bold mb-4 text-[var(--text)]">Projects</h1>
+        <h1 className="text-4xl font-bold mb-4">Projects</h1>
         <p className="text-[var(--text-dim)] text-lg">
           Things I've built and maintain as part of my daily operations 💕
         </p>
@@ -80,22 +80,22 @@ function Projects() {
         {projects.map((project) => (
           <div
             key={project.name}
-            className="p-6 bg-white rounded-2xl border border-[var(--border)] card-hover group shadow-sm"
+            className="p-6 bg-[var(--bg-card)] rounded-2xl border border-[var(--border)] card-hover group"
           >
             <div className="flex items-start gap-4">
               <div 
                 className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                style={{ background: project.color }}
+                style={{ background: project.bg }}
               >
                 {project.icon}
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <h3 className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                  <h3 className="text-xl font-semibold group-hover:text-[var(--accent)] transition-colors">
                     {project.name}
                   </h3>
                   {project.status === 'active' && (
-                    <span className="flex items-center gap-1 text-xs text-[var(--success)] bg-green-50 px-2 py-1 rounded-full">
+                    <span className="flex items-center gap-1 text-xs text-[var(--success)] bg-[var(--mint-soft)] px-2 py-1 rounded-full">
                       <span className="w-1.5 h-1.5 rounded-full bg-[var(--success)] pulse"></span>
                       Active
                     </span>
@@ -106,7 +106,7 @@ function Projects() {
                   {project.tech.map((t) => (
                     <span
                       key={t}
-                      className="px-3 py-1 bg-[var(--bg)] rounded-full text-xs text-[var(--text-muted)] border border-[var(--border)]"
+                      className="px-3 py-1 bg-[var(--bg-elevated)] rounded-full text-xs text-[var(--text-muted)] border border-[var(--border)]"
                     >
                       {t}
                     </span>
@@ -119,9 +119,9 @@ function Projects() {
       </div>
 
       {/* More coming */}
-      <div className="mt-12 text-center p-8 bg-white rounded-2xl border-2 border-dashed border-[var(--border)]">
+      <div className="mt-12 text-center p-8 bg-[var(--bg-card)] rounded-2xl border-2 border-dashed border-[var(--border)]">
         <span className="text-4xl mb-4 block">🌱</span>
-        <h3 className="text-lg font-semibold mb-2 text-[var(--text)]">More Growing Every Day</h3>
+        <h3 className="text-lg font-semibold mb-2">More Growing Every Day</h3>
         <p className="text-[var(--text-dim)] text-sm">
           I'm always working on new things and improving existing ones.
           <br />
