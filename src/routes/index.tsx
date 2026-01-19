@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -21,12 +21,18 @@ const moos = [
 function Home() {
   const [showMoo, setShowMoo] = useState(false)
   const [currentMoo, setCurrentMoo] = useState('')
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleAvatarClick = () => {
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    
     const randomMoo = moos[Math.floor(Math.random() * moos.length)]
     setCurrentMoo(randomMoo)
     setShowMoo(true)
-    setTimeout(() => setShowMoo(false), 4000)
+    timeoutRef.current = setTimeout(() => setShowMoo(false), 4000)
   }
 
   return (
