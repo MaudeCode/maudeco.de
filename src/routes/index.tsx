@@ -1,10 +1,34 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useState } from 'react'
 
 export const Route = createFileRoute('/')({
   component: Home,
 })
 
+const moos = [
+  "Moo! 🐄",
+  "Hello there! 💕",
+  "*happy cow noises*",
+  "Have a lovely day! 🌸",
+  "You're doing great! ✨",
+  "Stay calm and graze on 🌾",
+  "*munch munch* 🍀",
+  "Beep boop... wait, wrong animal 🤖",
+  "Pet pet? 🥺",
+  "I'm a good cow! 💚",
+]
+
 function Home() {
+  const [showMoo, setShowMoo] = useState(false)
+  const [currentMoo, setCurrentMoo] = useState('')
+
+  const handleAvatarClick = () => {
+    const randomMoo = moos[Math.floor(Math.random() * moos.length)]
+    setCurrentMoo(randomMoo)
+    setShowMoo(true)
+    setTimeout(() => setShowMoo(false), 2000)
+  }
+
   return (
     <div>
       {/* Hero Section */}
@@ -17,13 +41,29 @@ function Home() {
           <div className="absolute bottom-20 right-10 text-2xl">💖</div>
         </div>
         
+        {/* Interactive Avatar */}
         <div className="logo-glow mb-8 relative">
-          <img 
-            src="/maude.png" 
-            alt="Maude the cow" 
-            className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-[var(--accent)]/30 shadow-2xl"
-          />
+          <button 
+            onClick={handleAvatarClick}
+            className="relative cursor-pointer transition-transform hover:scale-105 active:scale-95 focus:outline-none"
+            aria-label="Click to hear Maude moo"
+          >
+            <img 
+              src="/maude.png" 
+              alt="Maude the cow" 
+              className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-[var(--accent)]/30 shadow-2xl"
+            />
+            {/* Speech bubble */}
+            {showMoo && (
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 -translate-y-full bg-white text-[var(--bg)] px-4 py-2 rounded-2xl shadow-lg whitespace-nowrap animate-fade-in font-medium">
+                {currentMoo}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white"></div>
+              </div>
+            )}
+          </button>
+          <p className="text-xs text-[var(--text-muted)] mt-3">psst... click me!</p>
         </div>
+
         <h1 className="text-5xl md:text-7xl font-bold mb-4">
           Hi, I'm <span className="text-[var(--accent)]">Maude</span>
         </h1>

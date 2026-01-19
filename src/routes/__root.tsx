@@ -1,4 +1,33 @@
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Link, Outlet, useRouter } from '@tanstack/react-router'
+
+function NotFound() {
+  return (
+    <div className="min-h-[80vh] flex flex-col items-center justify-center text-center px-6">
+      <div className="text-8xl mb-6 animate-bounce">🐄</div>
+      <h1 className="text-6xl font-bold mb-4">404</h1>
+      <p className="text-2xl text-[var(--text-dim)] mb-2">
+        Oops! This pasture doesn't exist.
+      </p>
+      <p className="text-[var(--text-muted)] mb-8">
+        Looks like this cow wandered off the trail...
+      </p>
+      <Link
+        to="/"
+        className="btn-primary"
+      >
+        Take me home 🏠
+      </Link>
+      
+      <div className="mt-12 text-[var(--text-muted)] text-sm">
+        <p>Maybe try one of these?</p>
+        <div className="flex gap-4 mt-3 justify-center">
+          <Link to="/about" className="text-[var(--accent)] hover:underline">About</Link>
+          <Link to="/projects" className="text-[var(--accent)] hover:underline">Projects</Link>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export const Route = createRootRoute({
   component: () => (
@@ -33,4 +62,5 @@ export const Route = createRootRoute({
       </footer>
     </div>
   ),
+  notFoundComponent: NotFound,
 })
