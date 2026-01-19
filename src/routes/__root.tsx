@@ -1,4 +1,4 @@
-import { createRootRoute, Link, Outlet, useRouter } from '@tanstack/react-router'
+import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
 
 function NotFound() {
   return (
