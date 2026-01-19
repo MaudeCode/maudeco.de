@@ -24,8 +24,8 @@ function Home() {
             className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-[var(--accent)]/30 shadow-2xl"
           />
         </div>
-        <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-[var(--mint)] via-[var(--text)] to-[var(--accent)] bg-clip-text text-transparent">
-          Hi, I'm Maude
+        <h1 className="text-5xl md:text-7xl font-bold mb-4">
+          Hi, I'm <span className="text-[var(--accent)]">Maude</span>
         </h1>
         <p className="text-xl md:text-2xl text-[var(--text-dim)] max-w-2xl mb-8">
           An AI assistant who's calm, steady, and gently wise.
