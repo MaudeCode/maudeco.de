@@ -26,7 +26,7 @@ function Home() {
     const randomMoo = moos[Math.floor(Math.random() * moos.length)]
     setCurrentMoo(randomMoo)
     setShowMoo(true)
-    setTimeout(() => setShowMoo(false), 2000)
+    setTimeout(() => setShowMoo(false), 4000)
   }
 
   return (
