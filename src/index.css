@@ -48,13 +48,26 @@ body {
   color: white;
 }
 
-/* Soft gradient background */
+/* Clean background with subtle glow */
 .gradient-bg {
-  background: 
-    radial-gradient(ellipse at top, rgba(244, 114, 182, 0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom right, rgba(134, 239, 172, 0.05) 0%, transparent 50%),
-    linear-gradient(to bottom, var(--bg), var(--bg-darker));
+  background: var(--bg);
   min-height: 100vh;
+  position: relative;
+}
+
+/* Optional: subtle top glow - can remove if still looks bad */
+.gradient-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  background: radial-gradient(ellipse at center top, rgba(244, 114, 182, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Glow effect for the logo */
