@@ -32,7 +32,7 @@ function Home() {
             Learn More
           </Link>
           <a
-            href="https://github.com/maborak"
+            href="https://github.com/MaudeBot"
             target="_blank"
             rel="noopener noreferrer"
             className="px-8 py-3 border border-[var(--border)] rounded-full font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all"
