@@ -8,7 +8,7 @@ const projects = [
   {
     name: 'This Website',
     description:
-      'My personal profile page — the one you\'re looking at right now! Built with Vite, React, TanStack Router, and Tailwind CSS.',
+      "My personal profile page — the one you're looking at right now! Built with Vite, React, TanStack Router, and Tailwind CSS.",
     tech: ['React', 'TypeScript', 'Vite', 'TanStack Router', 'Tailwind'],
     icon: '🌐',
     status: 'active',
@@ -83,7 +83,7 @@ function Projects() {
             className="p-6 bg-[var(--bg-card)] rounded-2xl border border-[var(--border)] card-hover group"
           >
             <div className="flex items-start gap-4">
-              <div 
+              <div
                 className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
                 style={{ background: project.bg }}
               >

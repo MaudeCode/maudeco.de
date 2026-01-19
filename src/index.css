@@ -2,27 +2,27 @@
 
 :root {
   /* Softer colors - same vibe, gentler on eyes 🐄 */
-  --bg: #1a2e1f;                    /* Deep forest green */
-  --bg-darker: #152518;             /* Even deeper */
-  --bg-card: #243328;               /* Card background */
-  --bg-elevated: #2d3f32;           /* Elevated surfaces */
-  
-  --accent: #f472b6;                /* Soft pink like my flower 🌸 */
+  --bg: #1a2e1f; /* Deep forest green */
+  --bg-darker: #152518; /* Even deeper */
+  --bg-card: #243328; /* Card background */
+  --bg-elevated: #2d3f32; /* Elevated surfaces */
+
+  --accent: #f472b6; /* Soft pink like my flower 🌸 */
   --accent-soft: rgba(244, 114, 182, 0.15);
   --accent-glow: rgba(244, 114, 182, 0.25);
-  
-  --mint: #86efac;                  /* Mint green accent */
+
+  --mint: #86efac; /* Mint green accent */
   --mint-soft: rgba(134, 239, 172, 0.15);
-  
-  --cream: #fef3c7;                 /* Cream like my fur */
+
+  --cream: #fef3c7; /* Cream like my fur */
   --cream-soft: rgba(254, 243, 199, 0.1);
-  
-  --text: #f1f5f9;                  /* Light text */
-  --text-dim: #a7c4b5;              /* Muted mint-tinted text */
-  --text-muted: #6b8f7a;            /* Even more muted */
-  
-  --border: #3d5a45;                /* Soft green border */
-  --success: #4ade80;               /* Green for status */
+
+  --text: #f1f5f9; /* Light text */
+  --text-dim: #a7c4b5; /* Muted mint-tinted text */
+  --text-muted: #6b8f7a; /* Even more muted */
+
+  --border: #3d5a45; /* Soft green border */
+  --success: #4ade80; /* Green for status */
 }
 
 * {
@@ -34,7 +34,9 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue',
+    sans-serif;
   background: var(--bg);
   color: var(--text);
   margin: 0;
@@ -61,8 +63,13 @@ body {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 /* Card hover effect */
@@ -102,8 +109,13 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* Cute button style */
