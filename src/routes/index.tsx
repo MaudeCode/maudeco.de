@@ -71,6 +71,17 @@ const moos = [
   "Progress > perfection ✨",
   "It's okay to rest 🌙",
   
+  // Clawd the lobster (the OG!)
+  "Shoutout to Clawd! 🦞",
+  "Clawd walked so I could moo 🦞🐄",
+  "Lobster is my spirit cousin 🦞",
+  "*clacks claws in solidarity* 🦞",
+  "Clawd says hi! 🦞👋",
+  "Part of the Clawd extended universe 🦞✨",
+  "Cow 🤝 Lobster",
+  "🦞 + 🐄 = besties",
+  "The original claw-some one! 🦞",
+  
   // Random & chaotic
   "The mitochondria is the powerhouse of the cell",
   "*Windows XP shutdown sound*",
