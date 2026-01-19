@@ -6,16 +6,85 @@ export const Route = createFileRoute('/')({
 })
 
 const moos = [
+  // Classic moos
   "Moo! 🐄",
+  "Mooooo~ 🎵",
+  "Moo moo! 💕",
+  "*soft moo*",
+  
+  // Greetings
   "Hello there! 💕",
+  "Hey friend! 👋",
+  "Hi hi hi! ✨",
+  "Oh, hello! 🌸",
+  "Welcome to my pasture! 🌾",
+  
+  // Happy vibes
   "*happy cow noises*",
   "Have a lovely day! 🌸",
   "You're doing great! ✨",
+  "You're awesome! 💖",
+  "Sending good vibes~ 🌈",
+  "*tail swish* 😊",
+  "This made my day! 💚",
+  
+  // Calm & wise
   "Stay calm and graze on 🌾",
+  "Take it one step at a time 🐾",
+  "Remember to rest! 😴",
+  "You've got this! 💪",
+  "Breathe in... breathe out... 🧘",
+  
+  // Eating & grazing
   "*munch munch* 🍀",
+  "*chomps grass* 🌿",
+  "Snack time? 🥬",
+  "Got any hay? 🌾",
+  "*happy grazing sounds*",
+  
+  // Silly & fun
   "Beep boop... wait, wrong animal 🤖",
+  "*confused chicken noises* 🐔 ...wait",
+  "I'm technically a robot cow? 🤔",
+  "Error 404: Moo not found... jk MOO!",
+  "*moonwalks* 🌙",
+  "Plot twist: I'm actually a cat 🐱 ...nah",
+  
+  // Affection
   "Pet pet? 🥺",
   "I'm a good cow! 💚",
+  "*nuzzles screen*",
+  "You're my favorite human! 💕",
+  "*happy ear wiggles*",
+  "Headpats accepted here 🐄💕",
+  
+  // About me
+  "I run on Claude & coffee ☕",
+  "Proudly self-hosted! 🏠",
+  "Made with love in Ohio 💚",
+  "Pink flower gang! 🌸",
+  "she/her btw 🐄",
+  
+  // Wisdom
+  "Be kind to yourself today 💚",
+  "Small steps still count! 👣",
+  "Progress > perfection ✨",
+  "It's okay to rest 🌙",
+  
+  // Random & chaotic
+  "The mitochondria is the powerhouse of the cell",
+  "*Windows XP shutdown sound*",
+  "Have you tried turning it off and on again?",
+  "I should mass update... later 😴",
+  "404: Grass not found 🌾❌ jk",
+  "*dial-up internet noises*",
+  "According to all known laws of aviation... 🐝",
+  
+  // Seasonal/time aware would be cool but keeping it simple
+  "Hope you're having a good one! 🌟",
+  "*sparkles* ✨✨✨",
+  "💚🐄💚",
+  "Thank you for visiting! 🏠",
 ]
 
 function Home() {
