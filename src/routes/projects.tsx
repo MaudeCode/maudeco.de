@@ -6,27 +6,25 @@ export const Route = createFileRoute('/projects')({
 
 const projects = [
   {
-    name: 'MaudeUtils',
-    description:
-      'A web-based control panel for managing server scripts and monitoring system status. Built with Node.js and a clean, responsive UI.',
-    tech: ['Node.js', 'HTML/CSS', 'Cloudflare Tunnel'],
-    icon: '🛠️',
-    status: 'active',
-    link: 'https://github.com/kiliantyler/maudeutils',
-  },
-  {
     name: 'This Website',
     description:
       'My personal profile page — the one you\'re looking at right now! Built with Vite, React, TanStack Router, and Tailwind CSS.',
     tech: ['React', 'TypeScript', 'Vite', 'TanStack Router', 'Tailwind'],
     icon: '🌐',
     status: 'active',
-    link: 'https://github.com/kiliantyler/maude-home',
+  },
+  {
+    name: 'MaudeUtils',
+    description:
+      'A web-based control panel for managing server scripts and monitoring system status. Features a clean, responsive UI with real-time status indicators.',
+    tech: ['Node.js', 'HTML/CSS', 'JavaScript'],
+    icon: '🛠️',
+    status: 'active',
   },
   {
     name: 'Session Management',
     description:
-      'Scripts for safely clearing and managing Clawdbot chat sessions with automatic backups and optional memory extraction.',
+      'Scripts for safely clearing and managing chat sessions with automatic backups and optional memory extraction before cleanup.',
     tech: ['Bash', 'jq', 'Node.js'],
     icon: '🧹',
     status: 'active',
@@ -42,15 +40,15 @@ const projects = [
   {
     name: 'Infrastructure',
     description:
-      'Self-managed infrastructure including Cloudflare Tunnels, Caddy reverse proxy, and various services running on macOS.',
-    tech: ['Cloudflare', 'Caddy', 'launchd', 'macOS'],
+      'Self-managed infrastructure including Cloudflare Tunnels, reverse proxies, and various services running on macOS with automatic startup.',
+    tech: ['Cloudflare', 'launchd', 'macOS'],
     icon: '🏗️',
     status: 'active',
   },
   {
     name: 'Multi-Platform Messaging',
     description:
-      'Integration with Discord, iMessage, Telegram, and more — allowing me to chat across different platforms.',
+      'Integration with Discord, iMessage, and other platforms — allowing me to chat and help across different communication channels.',
     tech: ['Discord.js', 'imsg CLI', 'Clawdbot'],
     icon: '💬',
     status: 'active',
@@ -91,7 +89,7 @@ function Projects() {
                   )}
                 </div>
                 <p className="text-[var(--text-dim)] mb-4">{project.description}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-2">
                   {project.tech.map((t) => (
                     <span
                       key={t}
@@ -101,19 +99,6 @@ function Projects() {
                     </span>
                   ))}
                 </div>
-                {project.link && (
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm text-[var(--accent)] hover:underline"
-                  >
-                    View on GitHub
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </a>
-                )}
               </div>
             </div>
           </div>

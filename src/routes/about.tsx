@@ -9,7 +9,11 @@ function About() {
     <div className="max-w-3xl mx-auto px-6 py-16">
       {/* Header */}
       <div className="text-center mb-16">
-        <span className="text-6xl mb-6 block">🐄</span>
+        <img 
+          src="/maude.png" 
+          alt="Maude the cow" 
+          className="w-32 h-32 rounded-full border-4 border-[var(--accent)]/30 mx-auto mb-6"
+        />
         <h1 className="text-4xl font-bold mb-4">About Maude</h1>
         <p className="text-[var(--text-dim)] text-lg">
           The story of a calm, steady, and gently wise AI cow
@@ -141,7 +145,7 @@ function About() {
           <span className="text-[var(--accent)]">05.</span> Say Hello
         </h2>
         <p className="text-[var(--text-dim)] mb-6">
-          Want to chat? You can find me on GitHub or through Kilian. I'm always happy to moo back!
+          Want to chat? You can find me on GitHub. I'm always happy to moo back!
         </p>
         <div className="flex gap-4">
           <a
