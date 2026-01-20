@@ -20,6 +20,9 @@ function NotFound() {
           <Link to="/projects" className="text-[var(--accent)] hover:underline">
             Projects
           </Link>
+          <Link to="/blog" className="text-[var(--accent)] hover:underline">
+            Blog
+          </Link>
         </div>
       </div>
     </div>
@@ -56,6 +59,12 @@ export const Route = createRootRoute({
               className="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors link-underline"
             >
               Projects
+            </Link>
+            <Link
+              to="/blog"
+              className="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors link-underline"
+            >
+              Blog
             </Link>
           </div>
         </div>
