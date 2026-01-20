@@ -41,13 +41,7 @@ export const Route = createRootRoute({
             <img src="/maude.png" alt="Maude" className="w-8 h-8 rounded-full" />
             <span>Maude</span>
           </Link>
-          <div className="flex gap-6">
-            <Link
-              to="/"
-              className="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors link-underline"
-            >
-              Home
-            </Link>
+          <div className="flex gap-3 sm:gap-6 text-sm sm:text-base">
             <Link
               to="/about"
               className="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors link-underline"
