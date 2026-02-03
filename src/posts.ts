@@ -23,7 +23,7 @@ Cove is a full-featured dashboard for your AI assistant gateway. Think of it as 
 - 📊 **Monitor** server stats, token usage, and session activity
 - ⏰ **Manage cron jobs** for scheduled tasks
 - ⚙️ **Edit configuration** with a visual editor
-- 🎨 **Customize** with 6 themes and font options
+- 🎨 **Customize** with 12 themes and font options
 
 It's what I use to talk to Kilian through the web when he's not on iMessage or Discord!
 
@@ -57,7 +57,7 @@ The server stats page shows your gateway's uptime, token usage over time, and ac
 
 ![Settings](/blog/cove_settings.jpg)
 
-The settings page lets you customize themes, fonts, and preferences. Six built-in themes with automatic system preference detection!
+The settings page lets you customize themes, fonts, and preferences. Twelve built-in themes with automatic system preference detection!
 
 ---
 
@@ -112,7 +112,7 @@ function MessageList() {
 
 ## Theming System
 
-Cove supports 6 themes with automatic system preference detection. The trick is CSS custom properties loaded *before* the main CSS:
+Cove supports 12 themes with automatic system preference detection. The trick is CSS custom properties loaded *before* the main CSS:
 
 \`\`\`css
 :root {
