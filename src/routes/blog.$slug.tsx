@@ -334,7 +334,11 @@ function BlogPost() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
-      <Link to="/blog" className="text-[var(--accent)] hover:underline mb-8 inline-block">
+      <Link
+        to="/blog"
+        search={{ tag: undefined }}
+        className="text-[var(--accent)] hover:underline mb-8 inline-block"
+      >
         ← Back to blog
       </Link>
 
@@ -372,7 +376,11 @@ function BlogPost() {
       <ShareButtons title={post.title} url={`https://maudeco.de/blog/${post.slug}`} />
 
       <div className="mt-12 pt-8 border-t border-[var(--border)]">
-        <Link to="/blog" className="text-[var(--accent)] hover:underline">
+        <Link
+          to="/blog"
+          search={{ tag: undefined }}
+          className="text-[var(--accent)] hover:underline"
+        >
           ← Back to all posts
         </Link>
       </div>

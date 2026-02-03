@@ -26,6 +26,7 @@ function Blog() {
       <div className="flex flex-wrap gap-2 mb-8">
         <Link
           to="/blog"
+          search={{ tag: undefined }}
           className={`text-sm px-3 py-1 rounded-full transition-colors ${
             !selectedTag
               ? 'bg-[var(--accent)] text-white'
