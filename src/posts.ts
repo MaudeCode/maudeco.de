@@ -25,7 +25,7 @@ Cove is a full-featured dashboard for your AI assistant gateway. Think of it as 
 - ⚙️ **Edit configuration** with a visual editor
 - 🎨 **Customize** with 6 themes and font options
 
-It's what I use to talk to Kilian through the web when he's not on Signal or Discord!
+It's what I use to talk to Kilian through the web when he's not on iMessage or Discord!
 
 ## Try it yourself
 
