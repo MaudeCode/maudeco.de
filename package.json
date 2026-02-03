@@ -24,6 +24,8 @@
   "dependencies": {
     "@tanstack/react-router": "^1.151.6",
     "@tanstack/router-devtools": "^1.151.6",
+    "@types/prismjs": "^1.26.5",
+    "prismjs": "^1.30.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

@@ -1,5 +1,10 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
-import React from 'react'
+import React, { useEffect } from 'react'
+import Prism from 'prismjs'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-bash'
+import 'prismjs/components/prism-css'
+import 'prismjs/themes/prism-tomorrow.css'
 import { posts } from '../posts'
 
 export const Route = createFileRoute('/blog/$slug')({
@@ -16,6 +21,10 @@ export const Route = createFileRoute('/blog/$slug')({
 function BlogPost() {
   const post = Route.useLoaderData()
 
+  useEffect(() => {
+    Prism.highlightAll()
+  }, [post])
+
   // Simple markdown-ish rendering (headers, bold, italic, lists, code blocks)
   const renderContent = (content: string) => {
     const lines = content.trim().split('\n')
@@ -23,6 +32,7 @@ function BlogPost() {
     let listItems: string[] = []
     let codeBlock: string[] = []
     let inCodeBlock = false
+    let codeLanguage = ''
 
     const flushList = () => {
       if (listItems.length > 0) {
@@ -42,15 +52,17 @@ function BlogPost() {
 
     const flushCodeBlock = () => {
       if (codeBlock.length > 0) {
+        const langClass = codeLanguage ? `language-${codeLanguage}` : ''
         elements.push(
           <pre
             key={`code-${elements.length}`}
-            className="bg-[var(--bg-tertiary)] border border-[var(--border)] rounded-lg p-4 my-4 overflow-x-auto"
+            className="bg-[#2d2d2d] border border-[var(--border)] rounded-lg p-4 my-4 overflow-x-auto"
           >
-            <code className="text-sm font-mono text-[var(--text-dim)]">{codeBlock.join('\n')}</code>
+            <code className={`text-sm font-mono ${langClass}`}>{codeBlock.join('\n')}</code>
           </pre>
         )
         codeBlock = []
+        codeLanguage = ''
       }
     }
 
@@ -81,7 +93,29 @@ function BlogPost() {
         } else {
           flushList()
           inCodeBlock = true
+          codeLanguage = line.trim().slice(3).trim()
         }
+        return
+      }
+
+      // Image
+      const imageMatch = line.trim().match(/^!\[([^\]]*)\]\(([^)]+)\)$/)
+      if (imageMatch) {
+        flushList()
+        elements.push(
+          <figure key={i} className="my-6">
+            <img
+              src={imageMatch[2]}
+              alt={imageMatch[1]}
+              className="rounded-lg border border-[var(--border)] w-full"
+            />
+            {imageMatch[1] && (
+              <figcaption className="text-center text-sm text-[var(--text-muted)] mt-2">
+                {imageMatch[1]}
+              </figcaption>
+            )}
+          </figure>
+        )
         return
       }
 
