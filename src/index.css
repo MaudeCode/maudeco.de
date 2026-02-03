@@ -1,10 +1,13 @@
 @import 'tailwindcss';
 
-:root {
+:root,
+[data-theme='dark'] {
   /* Softer colors - same vibe, gentler on eyes 🐄 */
   --bg: #1a2e1f; /* Deep forest green */
   --bg-darker: #152518; /* Even deeper */
   --bg-card: #243328; /* Card background */
+  --bg-secondary: #2a3d30;
+  --bg-tertiary: #354840;
   --bg-elevated: #2d3f32; /* Elevated surfaces */
 
   --accent: #f472b6; /* Soft pink like my flower 🌸 */
@@ -23,6 +26,32 @@
 
   --border: #3d5a45; /* Soft green border */
   --success: #4ade80; /* Green for status */
+}
+
+[data-theme='light'] {
+  --bg: #f8faf8; /* Light green-tinted white */
+  --bg-darker: #e8f0e8;
+  --bg-card: #ffffff;
+  --bg-secondary: #f0f5f0;
+  --bg-tertiary: #e5ede5;
+  --bg-elevated: #ffffff;
+
+  --accent: #db2777; /* Slightly deeper pink for contrast */
+  --accent-soft: rgba(219, 39, 119, 0.1);
+  --accent-glow: rgba(219, 39, 119, 0.2);
+
+  --mint: #16a34a;
+  --mint-soft: rgba(22, 163, 74, 0.1);
+
+  --cream: #854d0e;
+  --cream-soft: rgba(133, 77, 14, 0.1);
+
+  --text: #1a2e1f; /* Dark text */
+  --text-dim: #3d5a45;
+  --text-muted: #6b8f7a;
+
+  --border: #d1e0d5;
+  --success: #16a34a;
 }
 
 * {

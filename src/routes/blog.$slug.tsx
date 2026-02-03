@@ -1,11 +1,12 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Prism from 'prismjs'
 import 'prismjs/components/prism-typescript'
 import 'prismjs/components/prism-bash'
 import 'prismjs/components/prism-css'
 import 'prismjs/themes/prism-tomorrow.css'
 import { posts } from '../posts'
+import { calculateReadingTime, extractHeadings } from '../blog-utils'
 
 export const Route = createFileRoute('/blog/$slug')({
   component: BlogPost,
@@ -18,8 +19,111 @@ export const Route = createFileRoute('/blog/$slug')({
   },
 })
 
+function CopyButton({ code }: { code: string }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(code)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="absolute top-2 right-2 px-2 py-1 text-xs rounded bg-[var(--bg-secondary)] hover:bg-[var(--accent)] hover:text-white transition-colors"
+      title="Copy code"
+    >
+      {copied ? '✓ Copied!' : 'Copy'}
+    </button>
+  )
+}
+
+function ShareButtons({ title, url }: { title: string; url: string }) {
+  const [copied, setCopied] = useState(false)
+
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : url
+  const encodedUrl = encodeURIComponent(shareUrl)
+  const encodedTitle = encodeURIComponent(title)
+
+  const copyLink = async () => {
+    await navigator.clipboard.writeText(shareUrl)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <div className="flex items-center gap-3 mt-6">
+      <span className="text-sm text-[var(--text-muted)]">Share:</span>
+      <a
+        href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors"
+        title="Share on Twitter"
+      >
+        𝕏
+      </a>
+      <a
+        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors"
+        title="Share on LinkedIn"
+      >
+        in
+      </a>
+      <button
+        onClick={copyLink}
+        className="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors"
+        title="Copy link"
+      >
+        {copied ? '✓' : '🔗'}
+      </button>
+    </div>
+  )
+}
+
+function TableOfContents({
+  headings,
+}: {
+  headings: Array<{ level: number; text: string; id: string }>
+}) {
+  if (headings.length < 3) return null
+
+  return (
+    <nav className="bg-[var(--bg-secondary)] rounded-lg p-4 mb-8">
+      <h4 className="font-semibold mb-2 text-sm">Table of Contents</h4>
+      <ul className="space-y-1 text-sm">
+        {headings
+          .filter((h) => h.level <= 2)
+          .map((heading, i) => (
+            <li key={i} className={heading.level === 2 ? 'ml-0' : 'ml-4'}>
+              <a
+                href={`#${heading.id}`}
+                className="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors"
+              >
+                {heading.text}
+              </a>
+            </li>
+          ))}
+      </ul>
+    </nav>
+  )
+}
+
 function BlogPost() {
-  const post = Route.useLoaderData()
+  const post = Route.useLoaderData() as {
+    slug: string
+    title: string
+    date: string
+    tags?: string[]
+    excerpt: string
+    content: string
+  }
+
+  const readingTime = calculateReadingTime(post.content)
+  const headings = extractHeadings(post.content)
 
   useEffect(() => {
     Prism.highlightAll()
@@ -52,14 +156,15 @@ function BlogPost() {
 
     const flushCodeBlock = () => {
       if (codeBlock.length > 0) {
+        const code = codeBlock.join('\n')
         const langClass = codeLanguage ? `language-${codeLanguage}` : ''
         elements.push(
-          <pre
-            key={`code-${elements.length}`}
-            className="bg-[#2d2d2d] border border-[var(--border)] rounded-lg p-4 my-4 overflow-x-auto"
-          >
-            <code className={`text-sm font-mono ${langClass}`}>{codeBlock.join('\n')}</code>
-          </pre>
+          <div key={`code-${elements.length}`} className="relative my-4">
+            <CopyButton code={code} />
+            <pre className="bg-[#2d2d2d] border border-[var(--border)] rounded-lg p-4 overflow-x-auto">
+              <code className={`text-sm font-mono ${langClass}`}>{code}</code>
+            </pre>
+          </div>
         )
         codeBlock = []
         codeLanguage = ''
@@ -84,6 +189,12 @@ function BlogPost() {
       return <span dangerouslySetInnerHTML={{ __html: text }} />
     }
 
+    const makeHeadingId = (text: string) =>
+      text
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+
     lines.forEach((line, i) => {
       // Code block fence
       if (line.trim().startsWith('```')) {
@@ -95,6 +206,12 @@ function BlogPost() {
           inCodeBlock = true
           codeLanguage = line.trim().slice(3).trim()
         }
+        return
+      }
+
+      // Inside code block
+      if (inCodeBlock) {
+        codeBlock.push(line)
         return
       }
 
@@ -119,12 +236,6 @@ function BlogPost() {
         return
       }
 
-      // Inside code block
-      if (inCodeBlock) {
-        codeBlock.push(line)
-        return
-      }
-
       const trimmed = line.trim()
 
       // Empty line
@@ -143,9 +254,10 @@ function BlogPost() {
       // H1
       if (trimmed.startsWith('# ')) {
         flushList()
+        const text = trimmed.slice(2)
         elements.push(
-          <h1 key={i} className="text-3xl font-bold mt-8 mb-4">
-            {trimmed.slice(2)}
+          <h1 key={i} id={makeHeadingId(text)} className="text-3xl font-bold mt-8 mb-4">
+            {text}
           </h1>
         )
         return
@@ -154,9 +266,10 @@ function BlogPost() {
       // H2
       if (trimmed.startsWith('## ')) {
         flushList()
+        const text = trimmed.slice(3)
         elements.push(
-          <h2 key={i} className="text-2xl font-semibold mt-8 mb-3">
-            {trimmed.slice(3)}
+          <h2 key={i} id={makeHeadingId(text)} className="text-2xl font-semibold mt-8 mb-3">
+            {text}
           </h2>
         )
         return
@@ -165,9 +278,10 @@ function BlogPost() {
       // H3
       if (trimmed.startsWith('### ')) {
         flushList()
+        const text = trimmed.slice(4)
         elements.push(
-          <h3 key={i} className="text-xl font-semibold mt-6 mb-2">
-            {trimmed.slice(4)}
+          <h3 key={i} id={makeHeadingId(text)} className="text-xl font-semibold mt-6 mb-2">
+            {text}
           </h3>
         )
         return
@@ -182,14 +296,6 @@ function BlogPost() {
           .slice(1, -1)
           .split('|')
           .map((c) => c.trim())
-        const isHeader =
-          elements.length > 0 &&
-          lines[i - 1]?.trim().startsWith('|') &&
-          !lines[i - 2]?.trim().startsWith('|')
-
-        if (isHeader || (i > 0 && lines[i - 1]?.includes('---'))) {
-          // This might be header or first data row after separator
-        }
 
         elements.push(
           <div
@@ -232,7 +338,38 @@ function BlogPost() {
         ← Back to blog
       </Link>
 
+      {/* Header */}
+      <header className="mb-8">
+        <h1 className="text-4xl font-bold mb-2">{post.title}</h1>
+        <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--text-muted)]">
+          <time>{post.date}</time>
+          <span>•</span>
+          <span>{readingTime} min read</span>
+        </div>
+        {post.tags && post.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-3">
+            {post.tags.map((tag) => (
+              <Link
+                key={tag}
+                to="/blog"
+                search={{ tag }}
+                className="text-xs px-2 py-1 rounded-full bg-[var(--bg-secondary)] text-[var(--text-dim)] hover:bg-[var(--accent)] hover:text-white transition-colors"
+              >
+                #{tag}
+              </Link>
+            ))}
+          </div>
+        )}
+      </header>
+
+      {/* Table of Contents */}
+      <TableOfContents headings={headings} />
+
+      {/* Content */}
       <article className="prose-custom">{renderContent(post.content)}</article>
+
+      {/* Share */}
+      <ShareButtons title={post.title} url={`https://maudeco.de/blog/${post.slug}`} />
 
       <div className="mt-12 pt-8 border-t border-[var(--border)]">
         <Link to="/blog" className="text-[var(--accent)] hover:underline">
