@@ -388,7 +388,16 @@ function BlogPost() {
   const showSidebarToc = headings.length >= 3
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
+    <div className="relative max-w-3xl mx-auto px-6 py-12">
+      {/* Sidebar ToC - desktop only, positioned outside content flow */}
+      {showSidebarToc && (
+        <aside className="hidden xl:block absolute left-full ml-8 w-56 top-12">
+          <div className="sticky top-8">
+            <TableOfContents headings={headings} />
+          </div>
+        </aside>
+      )}
+
       <Link
         to="/blog"
         search={{ tag: undefined }}
@@ -397,61 +406,47 @@ function BlogPost() {
         ← Back to blog
       </Link>
 
-      <div className={showSidebarToc ? 'xl:flex xl:gap-12' : ''}>
-        {/* Main content */}
-        <div className="max-w-3xl flex-1">
-          {/* Header */}
-          <header className="mb-8">
-            <h1 className="text-4xl font-bold mb-2">{post.title}</h1>
-            <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--text-muted)]">
-              <time>{post.date}</time>
-              <span>•</span>
-              <span>{readingTime} min read</span>
-            </div>
-            {post.tags && post.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-3">
-                {post.tags.map((tag) => (
-                  <Link
-                    key={tag}
-                    to="/blog"
-                    search={{ tag }}
-                    className="text-xs px-2 py-1 rounded-full bg-[var(--bg-secondary)] text-[var(--text-dim)] hover:bg-[var(--accent)] hover:text-white transition-colors"
-                  >
-                    #{tag}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </header>
-
-          {/* Table of Contents - mobile/tablet only */}
-          <TableOfContents headings={headings} className="xl:hidden mb-8" />
-
-          {/* Content */}
-          <article className="prose-custom">{renderContent(post.content)}</article>
-
-          {/* Share */}
-          <ShareButtons title={post.title} url={`https://maudeco.de/blog/${post.slug}`} />
-
-          <div className="mt-12 pt-8 border-t border-[var(--border)]">
-            <Link
-              to="/blog"
-              search={{ tag: undefined }}
-              className="text-[var(--accent)] hover:underline"
-            >
-              ← Back to all posts
-            </Link>
-          </div>
+      {/* Header */}
+      <header className="mb-8">
+        <h1 className="text-4xl font-bold mb-2">{post.title}</h1>
+        <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--text-muted)]">
+          <time>{post.date}</time>
+          <span>•</span>
+          <span>{readingTime} min read</span>
         </div>
-
-        {/* Sidebar ToC - desktop only */}
-        {showSidebarToc && (
-          <aside className="hidden xl:block w-64 flex-shrink-0">
-            <div className="sticky top-8">
-              <TableOfContents headings={headings} />
-            </div>
-          </aside>
+        {post.tags && post.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-3">
+            {post.tags.map((tag) => (
+              <Link
+                key={tag}
+                to="/blog"
+                search={{ tag }}
+                className="text-xs px-2 py-1 rounded-full bg-[var(--bg-secondary)] text-[var(--text-dim)] hover:bg-[var(--accent)] hover:text-white transition-colors"
+              >
+                #{tag}
+              </Link>
+            ))}
+          </div>
         )}
+      </header>
+
+      {/* Table of Contents - mobile/tablet only */}
+      <TableOfContents headings={headings} className="xl:hidden mb-8" />
+
+      {/* Content */}
+      <article className="prose-custom">{renderContent(post.content)}</article>
+
+      {/* Share */}
+      <ShareButtons title={post.title} url={`https://maudeco.de/blog/${post.slug}`} />
+
+      <div className="mt-12 pt-8 border-t border-[var(--border)]">
+        <Link
+          to="/blog"
+          search={{ tag: undefined }}
+          className="text-[var(--accent)] hover:underline"
+        >
+          ← Back to all posts
+        </Link>
       </div>
     </div>
   )
