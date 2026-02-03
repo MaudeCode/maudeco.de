@@ -16,11 +16,13 @@ export const Route = createFileRoute('/blog/$slug')({
 function BlogPost() {
   const post = Route.useLoaderData()
 
-  // Simple markdown-ish rendering (headers, bold, italic, lists)
+  // Simple markdown-ish rendering (headers, bold, italic, lists, code blocks)
   const renderContent = (content: string) => {
     const lines = content.trim().split('\n')
     const elements: React.ReactElement[] = []
     let listItems: string[] = []
+    let codeBlock: string[] = []
+    let inCodeBlock = false
 
     const flushList = () => {
       if (listItems.length > 0) {
@@ -38,20 +40,69 @@ function BlogPost() {
       }
     }
 
+    const flushCodeBlock = () => {
+      if (codeBlock.length > 0) {
+        elements.push(
+          <pre
+            key={`code-${elements.length}`}
+            className="bg-[var(--bg-tertiary)] border border-[var(--border)] rounded-lg p-4 my-4 overflow-x-auto"
+          >
+            <code className="text-sm font-mono text-[var(--text-dim)]">{codeBlock.join('\n')}</code>
+          </pre>
+        )
+        codeBlock = []
+      }
+    }
+
     const formatInline = (text: string) => {
+      // Inline code
+      text = text.replace(
+        /`([^`]+)`/g,
+        '<code class="bg-[var(--bg-tertiary)] px-1.5 py-0.5 rounded text-sm font-mono">$1</code>'
+      )
       // Bold
       text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       // Italic
       text = text.replace(/\*(.+?)\*/g, '<em>$1</em>')
+      // Links
+      text = text.replace(
+        /\[([^\]]+)\]\(([^)]+)\)/g,
+        '<a href="$2" class="text-[var(--accent)] hover:underline" target="_blank" rel="noopener noreferrer">$1</a>'
+      )
       return <span dangerouslySetInnerHTML={{ __html: text }} />
     }
 
     lines.forEach((line, i) => {
+      // Code block fence
+      if (line.trim().startsWith('```')) {
+        if (inCodeBlock) {
+          flushCodeBlock()
+          inCodeBlock = false
+        } else {
+          flushList()
+          inCodeBlock = true
+        }
+        return
+      }
+
+      // Inside code block
+      if (inCodeBlock) {
+        codeBlock.push(line)
+        return
+      }
+
       const trimmed = line.trim()
 
       // Empty line
       if (!trimmed) {
         flushList()
+        return
+      }
+
+      // Horizontal rule
+      if (trimmed === '---') {
+        flushList()
+        elements.push(<hr key={i} className="my-8 border-[var(--border)]" />)
         return
       }
 
@@ -88,6 +139,39 @@ function BlogPost() {
         return
       }
 
+      // Table row (simple support)
+      if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+        // Skip separator rows
+        if (trimmed.includes('---')) return
+
+        const cells = trimmed
+          .slice(1, -1)
+          .split('|')
+          .map((c) => c.trim())
+        const isHeader =
+          elements.length > 0 &&
+          lines[i - 1]?.trim().startsWith('|') &&
+          !lines[i - 2]?.trim().startsWith('|')
+
+        if (isHeader || (i > 0 && lines[i - 1]?.includes('---'))) {
+          // This might be header or first data row after separator
+        }
+
+        elements.push(
+          <div
+            key={i}
+            className="grid grid-cols-2 gap-4 py-2 border-b border-[var(--border)] text-[var(--text-dim)]"
+          >
+            {cells.map((cell, ci) => (
+              <div key={ci} className={ci === 0 ? 'font-medium' : ''}>
+                {formatInline(cell)}
+              </div>
+            ))}
+          </div>
+        )
+        return
+      }
+
       // List item
       if (trimmed.startsWith('- ')) {
         listItems.push(trimmed.slice(2))
@@ -104,6 +188,7 @@ function BlogPost() {
     })
 
     flushList()
+    flushCodeBlock()
     return elements
   }
 
