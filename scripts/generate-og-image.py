@@ -11,7 +11,29 @@ Usage:
 
 import argparse
 import os
+import re
 from PIL import Image, ImageDraw, ImageFont
+
+
+def strip_emojis(text: str) -> str:
+    """Remove emojis from text since our font doesn't support them."""
+    emoji_pattern = re.compile(
+        "["
+        "\U0001F600-\U0001F64F"  # emoticons
+        "\U0001F300-\U0001F5FF"  # symbols & pictographs
+        "\U0001F680-\U0001F6FF"  # transport & map symbols
+        "\U0001F700-\U0001F77F"  # alchemical symbols
+        "\U0001F780-\U0001F7FF"  # geometric shapes extended
+        "\U0001F800-\U0001F8FF"  # supplemental arrows-c
+        "\U0001F900-\U0001F9FF"  # supplemental symbols & pictographs
+        "\U0001FA00-\U0001FA6F"  # chess symbols
+        "\U0001FA70-\U0001FAFF"  # symbols & pictographs extended-a
+        "\U00002702-\U000027B0"  # dingbats
+        "\U000024C2-\U0001F251"  # enclosed characters
+        "]+",
+        flags=re.UNICODE,
+    )
+    return emoji_pattern.sub("", text).strip()
 
 # Paths
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -67,6 +89,9 @@ def generate_blog_og_image(
     output_path: str = "og-image.png",
 ) -> str:
     """Generate an OG image for a blog post with title and branding."""
+    
+    # Strip emojis since our font doesn't support them
+    title = strip_emojis(title)
     
     # Load base template
     if os.path.exists(BASE_IMAGE):
