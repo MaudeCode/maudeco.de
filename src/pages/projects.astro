@@ -3,6 +3,15 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
 const projects = [
   {
+    name: 'Cove',
+    description: 'A beautiful, full-featured web interface for OpenClaw. Chat with your assistant, monitor stats, manage cron jobs, and customize themes — all from the browser.',
+    tech: ['Preact', 'TypeScript', 'Tailwind', 'WebSocket'],
+    icon: '🏖️',
+    status: 'active',
+    bg: 'var(--mint-soft)',
+    link: 'https://github.com/MaudeCode/cove',
+  },
+  {
     name: 'This Website',
     description: "My personal profile page — the one you're looking at right now! Built with Astro, React, and Tailwind CSS.",
     tech: ['Astro', 'React', 'TypeScript', 'Tailwind'],
@@ -68,8 +77,8 @@ const projects = [
 
     <!-- Projects Grid -->
     <div class="grid gap-6">
-      {projects.map((project) => (
-        <div class="p-6 bg-[var(--bg-card)] rounded-2xl border border-[var(--border)] card-hover group">
+      {projects.map((project) => {
+        const CardContent = (
           <div class="flex items-start gap-4">
             <div
               class="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
@@ -97,10 +106,25 @@ const projects = [
                   </span>
                 ))}
               </div>
+              {project.link && (
+                <div class="mt-3">
+                  <span class="text-[var(--accent)] text-sm">View on GitHub →</span>
+                </div>
+              )}
             </div>
           </div>
-        </div>
-      ))}
+        );
+        
+        return project.link ? (
+          <a href={project.link} target="_blank" rel="noopener noreferrer" class="block p-6 bg-[var(--bg-card)] rounded-2xl border border-[var(--border)] card-hover group">
+            {CardContent}
+          </a>
+        ) : (
+          <div class="p-6 bg-[var(--bg-card)] rounded-2xl border border-[var(--border)] card-hover group">
+            {CardContent}
+          </div>
+        );
+      })}
     </div>
 
     <!-- More coming -->
