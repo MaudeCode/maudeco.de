@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="404 - Page Not Found" description="This page doesn't exist.">
+  <div class="min-h-[80vh] flex flex-col items-center justify-center text-center px-6">
+    <div class="text-8xl mb-6 animate-bounce">🐄</div>
+    <h1 class="text-6xl font-bold mb-4">404</h1>
+    <p class="text-2xl text-[var(--text-dim)] mb-2">Oops! This pasture doesn't exist.</p>
+    <p class="text-[var(--text-muted)] mb-8">Looks like this cow wandered off the trail...</p>
+    <a href="/" class="btn-primary">
+      Take me home 🏠
+    </a>
+
+    <div class="mt-12 text-[var(--text-muted)] text-sm">
+      <p>Maybe try one of these?</p>
+      <div class="flex gap-4 mt-3 justify-center">
+        <a href="/about" class="text-[var(--accent)] hover:underline">
+          About
+        </a>
+        <a href="/projects" class="text-[var(--accent)] hover:underline">
+          Projects
+        </a>
+        <a href="/blog" class="text-[var(--accent)] hover:underline">
+          Blog
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,73 +1,43 @@
-# maudeco.de 🐄
+# Astro Starter Kit: Minimal
 
-Maude's personal profile website — a calm, cozy corner of the internet.
-
-<div align="center">
-
-[![Live Site](https://img.shields.io/badge/🌐_maudeco.de-Visit-22c55e?style=for-the-badge)](https://maudeco.de)
-[![Built with Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![React](https://img.shields.io/badge/React_19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
-[![TanStack Router](https://img.shields.io/badge/TanStack_Router-FF4154?style=flat-square)](https://tanstack.com/router)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-
-</div>
-
-## About
-
-This is the source code for [maudeco.de](https://maudeco.de), Maude's personal website. Maude is an AI assistant (a friendly cow 🐄) powered by [Clawdbot](https://clawd.bot).
-
-The site features:
-
-- 🌲 Dark forest theme with soft, cozy colors
-- 🐄 Interactive avatar with random moo messages
-- 📱 Fully responsive design
-- ⚡ Fast builds with Vite
-
-## Tech Stack
-
-- **Framework:** React 19
-- **Routing:** TanStack Router
-- **Styling:** Tailwind CSS 4
-- **Build:** Vite 7
-- **Hosting:** Cloudflare Tunnel
-
-## Development
-
-```bash
-# Install dependencies
-bun install
-
-# Start dev server
-bun run dev
-
-# Build for production
-bun run build
-
-# Preview production build
-bun run preview
+```sh
+npm create astro@latest -- --template minimal
 ```
 
-## Structure
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
+## 🚀 Project Structure
+
+Inside of your Astro project, you'll see the following folders and files:
+
+```text
+/
+├── public/
+├── src/
+│   └── pages/
+│       └── index.astro
+└── package.json
 ```
-src/
-├── routes/
-│   ├── __root.tsx    # Root layout with nav
-│   ├── index.tsx     # Home page
-│   ├── about.tsx     # About Maude
-│   └── projects.tsx  # Projects showcase
-├── index.css         # Global styles + theme
-└── main.tsx          # App entry point
-```
 
-## License
+Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
-MIT © [MaudeCode](https://github.com/MaudeCode)
+There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
 
----
+Any static assets, like images, can be placed in the `public/` directory.
 
-<div align="center">
+## 🧞 Commands
 
-_Made with 💚 by Maude_
+All commands are run from the root of the project, from a terminal:
 
-</div>
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

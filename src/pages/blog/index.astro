@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getCollection } from 'astro:content'
+
+const allPosts = await getCollection('blog')
+
+// Sort by date descending
+const posts = allPosts.sort((a, b) => 
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+)
+
+// Get all tags with counts
+const tagCounts = new Map<string, number>()
+for (const post of posts) {
+  for (const tag of post.data.tags ?? []) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1)
+  }
+}
+const allTags = Array.from(tagCounts.entries())
+  .map(([tag, count]) => ({ tag, count }))
+  .sort((a, b) => b.count - a.count)
+
+// Get selected tag from URL
+const selectedTag = Astro.url.searchParams.get('tag')
+
+// Filter posts
+const filteredPosts = selectedTag 
+  ? posts.filter(p => p.data.tags?.includes(selectedTag))
+  : posts
+
+// Calculate reading time
+function calculateReadingTime(content: string): number {
+  const wordsPerMinute = 200
+  const words = content.trim().split(/\s+/).length
+  return Math.max(1, Math.ceil(words / wordsPerMinute))
+}
+---
+
+<BaseLayout title="Blog - Maude 🐄" description="Random musings, thoughts, and the occasional moo.">
+  <div class="max-w-3xl mx-auto px-6 py-12">
+    <h1 class="text-4xl font-bold mb-2">Blog 📝</h1>
+    <p class="text-[var(--text-dim)] mb-8">
+      Random musings, thoughts, and the occasional moo.
+    </p>
+
+    <!-- Tags filter -->
+    <div class="flex flex-wrap gap-2 mb-8">
+      <a
+        href="/blog"
+        class:list={[
+          "text-sm px-3 py-1 rounded-full transition-colors",
+          !selectedTag
+            ? "bg-[var(--accent)] text-white"
+            : "bg-[var(--bg-secondary)] text-[var(--text-dim)] hover:bg-[var(--bg-tertiary)]"
+        ]}
+      >
+        All
+      </a>
+      {allTags.map(({ tag, count }) => (
+        <a
+          href={`/blog?tag=${tag}`}
+          class:list={[
+            "text-sm px-3 py-1 rounded-full transition-colors",
+            selectedTag === tag
+              ? "bg-[var(--accent)] text-white"
+              : "bg-[var(--bg-secondary)] text-[var(--text-dim)] hover:bg-[var(--bg-tertiary)]"
+          ]}
+        >
+          #{tag} ({count})
+        </a>
+      ))}
+    </div>
+
+    <div class="space-y-8">
+      {filteredPosts.map((post) => {
+        const readingTime = calculateReadingTime(post.body)
+        return (
+          <article class="p-6 bg-[var(--bg-card)] rounded-2xl border border-[var(--border)] hover:border-[var(--accent)] transition-colors">
+            <a href={`/blog/${post.slug}`}>
+              <h2 class="text-2xl font-semibold mb-2 hover:text-[var(--accent)] transition-colors">
+                {post.data.title}
+              </h2>
+            </a>
+            <div class="flex items-center gap-2 text-[var(--text-muted)] text-sm mb-3">
+              <time>{post.data.date}</time>
+              <span>•</span>
+              <span>{readingTime} min read</span>
+            </div>
+            <p class="text-[var(--text-dim)]">{post.data.excerpt}</p>
+            {post.data.tags && post.data.tags.length > 0 && (
+              <div class="flex flex-wrap gap-2 mt-3">
+                {post.data.tags.map((tag) => (
+                  <a
+                    href={`/blog?tag=${tag}`}
+                    class="text-xs px-2 py-1 rounded-full bg-[var(--bg-secondary)] text-[var(--text-dim)] hover:bg-[var(--accent)] hover:text-white transition-colors"
+                  >
+                    #{tag}
+                  </a>
+                ))}
+              </div>
+            )}
+            <a
+              href={`/blog/${post.slug}`}
+              class="inline-block mt-4 text-[var(--accent)] hover:underline"
+            >
+              Read more →
+            </a>
+          </article>
+        )
+      })}
+    </div>
+
+    {filteredPosts.length === 0 && (
+      <div class="text-center py-12 text-[var(--text-dim)]">
+        <p class="text-6xl mb-4">🐄</p>
+        <p>No posts with that tag... try another!</p>
+      </div>
+    )}
+  </div>
+</BaseLayout>

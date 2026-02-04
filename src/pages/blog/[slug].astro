@@ -1,0 +1,246 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getCollection, type CollectionEntry } from 'astro:content'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog')
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }))
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>
+}
+
+const { post } = Astro.props
+const { Content } = await post.render()
+
+// Calculate reading time
+function calculateReadingTime(content: string): number {
+  const wordsPerMinute = 200
+  const words = content.trim().split(/\s+/).length
+  return Math.max(1, Math.ceil(words / wordsPerMinute))
+}
+
+const readingTime = calculateReadingTime(post.body)
+
+// OG image path - check if post-specific exists, otherwise use default
+const ogImage = post.data.ogImage ?? `/blog/${post.slug}-og.png`
+---
+
+<BaseLayout 
+  title={`${post.data.title} - Maude's Blog`}
+  description={post.data.excerpt}
+  ogImage={ogImage}
+>
+  <div class="max-w-3xl mx-auto px-6 py-12">
+    <a href="/blog" class="text-[var(--accent)] hover:underline mb-8 inline-block">
+      ← Back to blog
+    </a>
+
+    <!-- Header -->
+    <header class="mb-8">
+      <h1 class="text-4xl font-bold mb-2">{post.data.title}</h1>
+      <div class="flex flex-wrap items-center gap-3 text-sm text-[var(--text-muted)]">
+        <time>{post.data.date}</time>
+        <span>•</span>
+        <span>{readingTime} min read</span>
+      </div>
+      {post.data.tags && post.data.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-3">
+          {post.data.tags.map((tag) => (
+            <a
+              href={`/blog?tag=${tag}`}
+              class="text-xs px-2 py-1 rounded-full bg-[var(--bg-secondary)] text-[var(--text-dim)] hover:bg-[var(--accent)] hover:text-white transition-colors"
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <!-- Content -->
+    <article class="prose-custom">
+      <Content />
+    </article>
+
+    <!-- Share -->
+    <div class="flex items-center gap-3 mt-6">
+      <span class="text-sm text-[var(--text-muted)]">Share:</span>
+      <a
+        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(`https://maudeco.de/blog/${post.slug}`)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors"
+        title="Share on Twitter"
+      >
+        𝕏
+      </a>
+      <a
+        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://maudeco.de/blog/${post.slug}`)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors"
+        title="Share on LinkedIn"
+      >
+        in
+      </a>
+      <button
+        id="copy-link"
+        class="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors"
+        title="Copy link"
+        data-url={`https://maudeco.de/blog/${post.slug}`}
+      >
+        🔗
+      </button>
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-[var(--border)]">
+      <a href="/blog" class="text-[var(--accent)] hover:underline">
+        ← Back to all posts
+      </a>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const copyBtn = document.getElementById('copy-link')
+  copyBtn?.addEventListener('click', async () => {
+    const url = copyBtn.getAttribute('data-url') || window.location.href
+    await navigator.clipboard.writeText(url)
+    copyBtn.textContent = '✓'
+    setTimeout(() => { copyBtn.textContent = '🔗' }, 2000)
+  })
+</script>
+
+<style>
+  /* Markdown content styles */
+  .prose-custom :global(h1) {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .prose-custom :global(h2) {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .prose-custom :global(h3) {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .prose-custom :global(p) {
+    color: var(--text-dim);
+    margin: 1rem 0;
+    line-height: 1.75;
+  }
+  
+  .prose-custom :global(a) {
+    color: var(--accent);
+  }
+  
+  .prose-custom :global(a:hover) {
+    text-decoration: underline;
+  }
+  
+  .prose-custom :global(ul),
+  .prose-custom :global(ol) {
+    color: var(--text-dim);
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+  
+  .prose-custom :global(li) {
+    margin: 0.25rem 0;
+  }
+  
+  .prose-custom :global(ul) {
+    list-style-type: disc;
+  }
+  
+  .prose-custom :global(ol) {
+    list-style-type: decimal;
+  }
+  
+  .prose-custom :global(blockquote) {
+    border-left: 4px solid var(--accent);
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--text-dim);
+  }
+  
+  .prose-custom :global(code) {
+    background: var(--bg-tertiary);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-family: monospace;
+  }
+  
+  .prose-custom :global(pre) {
+    background: #2d2d2d;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+  }
+  
+  .prose-custom :global(pre code) {
+    background: none;
+    padding: 0;
+    font-size: 0.875rem;
+  }
+  
+  .prose-custom :global(img) {
+    border-radius: 0.5rem;
+    border: 1px solid var(--border);
+    margin: 1.5rem 0;
+    max-width: 100%;
+  }
+  
+  .prose-custom :global(hr) {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+  
+  .prose-custom :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.875rem;
+  }
+  
+  .prose-custom :global(th),
+  .prose-custom :global(td) {
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+  }
+  
+  .prose-custom :global(th) {
+    background: var(--bg-secondary);
+    font-weight: 600;
+  }
+  
+  .prose-custom :global(strong) {
+    color: var(--text);
+    font-weight: 600;
+  }
+  
+  .prose-custom :global(em) {
+    color: var(--mint);
+  }
+</style>
