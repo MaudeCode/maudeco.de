@@ -23,6 +23,8 @@ BASE_IMAGE = os.path.join(REPO_DIR, "public", "og-template.png")
 OG_WIDTH, OG_HEIGHT = 1200, 630
 BROWN = (93, 64, 55)  # Dark brown matching cow outlines
 FONT_PATH = "/System/Library/Fonts/Supplemental/MarkerFelt.ttc"
+EMOJI_FONT_PATH = os.path.expanduser("~/Library/Fonts/NotoColorEmoji.ttf")
+EMOJI_FONT_SIZE = 109  # Noto Color Emoji only supports this size
 
 # Text area for post title (right side, after the cow)
 TEXT_AREA_START_X = 500
@@ -30,58 +32,136 @@ TEXT_AREA_END_X = 1100  # More padding from right edge
 TEXT_AREA_WIDTH = TEXT_AREA_END_X - TEXT_AREA_START_X
 MAX_TITLE_LINES = 4
 
+# Emoji detection pattern
+EMOJI_PATTERN = re.compile(
+    "("
+    "["
+    "\U0001F600-\U0001F64F"  # emoticons
+    "\U0001F300-\U0001F5FF"  # symbols & pictographs
+    "\U0001F680-\U0001F6FF"  # transport & map symbols
+    "\U0001F700-\U0001F77F"  # alchemical symbols
+    "\U0001F780-\U0001F7FF"  # geometric shapes extended
+    "\U0001F800-\U0001F8FF"  # supplemental arrows-c
+    "\U0001F900-\U0001F9FF"  # supplemental symbols & pictographs
+    "\U0001FA00-\U0001FA6F"  # chess symbols
+    "\U0001FA70-\U0001FAFF"  # symbols & pictographs extended-a
+    "\U00002702-\U000027B0"  # dingbats
+    "\U000024C2-\U0001F251"  # enclosed characters
+    "]+"
+    ")"
+)
 
-def strip_emojis(text: str) -> str:
-    """
-    Remove emojis from text.
+
+def split_text_and_emojis(text: str) -> list[tuple[str, bool]]:
+    """Split text into segments of (text, is_emoji) tuples."""
+    segments = []
+    last_end = 0
     
-    Note: MarkerFelt and most fonts don't support emoji glyphs.
-    Apple Color Emoji is bitmap-only with fixed sizes, making it
-    incompatible with PIL's arbitrary sizing. Stripping is the
-    cleanest solution for now.
-    """
-    emoji_pattern = re.compile(
-        "["
-        "\U0001F600-\U0001F64F"  # emoticons
-        "\U0001F300-\U0001F5FF"  # symbols & pictographs
-        "\U0001F680-\U0001F6FF"  # transport & map symbols
-        "\U0001F700-\U0001F77F"  # alchemical symbols
-        "\U0001F780-\U0001F7FF"  # geometric shapes extended
-        "\U0001F800-\U0001F8FF"  # supplemental arrows-c
-        "\U0001F900-\U0001F9FF"  # supplemental symbols & pictographs
-        "\U0001FA00-\U0001FA6F"  # chess symbols
-        "\U0001FA70-\U0001FAFF"  # symbols & pictographs extended-a
-        "\U00002702-\U000027B0"  # dingbats
-        "\U000024C2-\U0001F251"  # enclosed characters
-        "]+",
-        flags=re.UNICODE,
-    )
-    # Strip emojis and clean up extra whitespace
-    result = emoji_pattern.sub("", text)
-    result = re.sub(r'\s+', ' ', result).strip()
-    return result
+    for match in EMOJI_PATTERN.finditer(text):
+        # Add text before emoji
+        if match.start() > last_end:
+            segments.append((text[last_end:match.start()], False))
+        # Add emoji
+        segments.append((match.group(), True))
+        last_end = match.end()
+    
+    # Add remaining text
+    if last_end < len(text):
+        segments.append((text[last_end:], False))
+    
+    return segments if segments else [(text, False)]
+
+
+def render_emoji(emoji: str, emoji_font: ImageFont.FreeTypeFont, target_size: int) -> Image.Image:
+    """Render an emoji and scale it to the target size."""
+    # Get the bounding box at native size
+    temp_img = Image.new('RGBA', (200, 200), (0, 0, 0, 0))
+    temp_draw = ImageDraw.Draw(temp_img)
+    bbox = temp_draw.textbbox((0, 0), emoji, font=emoji_font)
+    
+    # Create image just big enough for the emoji
+    width = bbox[2] - bbox[0] + 20
+    height = bbox[3] - bbox[1] + 20
+    emoji_img = Image.new('RGBA', (width, height), (0, 0, 0, 0))
+    emoji_draw = ImageDraw.Draw(emoji_img)
+    
+    # Draw emoji
+    emoji_draw.text((-bbox[0] + 10, -bbox[1] + 10), emoji, font=emoji_font, embedded_color=True)
+    
+    # Scale to target size
+    scale = target_size / EMOJI_FONT_SIZE
+    new_width = int(width * scale)
+    new_height = int(height * scale)
+    emoji_img = emoji_img.resize((new_width, new_height), Image.LANCZOS)
+    
+    return emoji_img
+
+
+def get_segment_width(segment: str, is_emoji: bool, text_font: ImageFont.FreeTypeFont, target_size: int, draw: ImageDraw.Draw) -> int:
+    """Get width of a text segment."""
+    if is_emoji:
+        # Estimate emoji width based on scaling
+        scale = target_size / EMOJI_FONT_SIZE
+        return int(EMOJI_FONT_SIZE * scale * 1.2)  # Approximate width
+    else:
+        bbox = draw.textbbox((0, 0), segment, font=text_font)
+        return bbox[2] - bbox[0]
+
+
+def get_text_width_with_emojis(text: str, text_font: ImageFont.FreeTypeFont, target_size: int, draw: ImageDraw.Draw) -> int:
+    """Calculate total width of text including emojis."""
+    segments = split_text_and_emojis(text)
+    return sum(get_segment_width(seg, is_emoji, text_font, target_size, draw) for seg, is_emoji in segments)
+
+
+def draw_text_with_emojis(
+    img: Image.Image,
+    draw: ImageDraw.Draw,
+    pos: tuple[int, int],
+    text: str,
+    text_font: ImageFont.FreeTypeFont,
+    emoji_font: ImageFont.FreeTypeFont | None,
+    target_size: int,
+    fill: tuple[int, int, int],
+) -> None:
+    """Draw text with emojis using appropriate fonts."""
+    segments = split_text_and_emojis(text)
+    x, y = pos
+    
+    for segment, is_emoji in segments:
+        if is_emoji and emoji_font:
+            # Render emoji as image and paste
+            emoji_img = render_emoji(segment, emoji_font, target_size)
+            # Center vertically with text
+            emoji_y = y + (target_size - emoji_img.height) // 2
+            img.paste(emoji_img, (int(x), int(emoji_y)), emoji_img)
+            x += emoji_img.width
+        else:
+            draw.text((x, y), segment, font=text_font, fill=fill)
+            bbox = draw.textbbox((0, 0), segment, font=text_font)
+            x += bbox[2] - bbox[0]
 
 
 def get_font_size_for_title(title: str, draw: ImageDraw.Draw) -> int:
     """Dynamically choose font size based on title length."""
     for size in [56, 48, 42, 36, 32, 28]:
-        font = ImageFont.truetype(FONT_PATH, size)
-        lines = wrap_text(title, font, TEXT_AREA_WIDTH, draw)
+        text_font = ImageFont.truetype(FONT_PATH, size)
+        lines = wrap_text_with_emojis(title, text_font, size, TEXT_AREA_WIDTH, draw)
         if len(lines) <= MAX_TITLE_LINES:
             return size
     return 24  # Minimum size
 
 
-def wrap_text(text: str, font: ImageFont.FreeTypeFont, max_width: int, draw: ImageDraw.Draw) -> list[str]:
-    """Wrap text to fit within max_width."""
+def wrap_text_with_emojis(text: str, text_font: ImageFont.FreeTypeFont, target_size: int, max_width: int, draw: ImageDraw.Draw) -> list[str]:
+    """Wrap text to fit within max_width, accounting for emojis."""
     words = text.split()
     lines = []
     current_line = []
     
     for word in words:
         test_line = ' '.join(current_line + [word])
-        bbox = draw.textbbox((0, 0), test_line, font=font)
-        if bbox[2] - bbox[0] <= max_width:
+        width = get_text_width_with_emojis(test_line, text_font, target_size, draw)
+        if width <= max_width:
             current_line.append(word)
         else:
             if current_line:
@@ -100,9 +180,6 @@ def generate_blog_og_image(
 ) -> str:
     """Generate an OG image for a blog post with title and branding."""
     
-    # Strip emojis since our font doesn't support them
-    title = strip_emojis(title)
-    
     # Load base template
     if os.path.exists(BASE_IMAGE):
         img = Image.open(BASE_IMAGE).convert('RGBA')
@@ -114,6 +191,14 @@ def generate_blog_og_image(
         img = img.resize((OG_WIDTH, OG_HEIGHT), Image.LANCZOS)
     
     draw = ImageDraw.Draw(img)
+    
+    # Load emoji font if available
+    emoji_font = None
+    if os.path.exists(EMOJI_FONT_PATH):
+        try:
+            emoji_font = ImageFont.truetype(EMOJI_FONT_PATH, EMOJI_FONT_SIZE)
+        except Exception as e:
+            print(f"Warning: Could not load emoji font: {e}")
     
     # Fonts
     header_font = ImageFont.truetype(FONT_PATH, 72)
@@ -132,7 +217,7 @@ def generate_blog_og_image(
     draw.text((header_x, header_y), header, font=header_font, fill=BROWN)
     
     # Wrap title text
-    title_lines = wrap_text(title, title_font, TEXT_AREA_WIDTH, draw)
+    title_lines = wrap_text_with_emojis(title, title_font, title_size, TEXT_AREA_WIDTH, draw)
     
     # Calculate title height
     line_height = int(title_size * 1.15)
@@ -149,10 +234,9 @@ def generate_blog_og_image(
     # Draw title lines (right side only)
     current_y = title_start_y
     for line in title_lines:
-        bbox = draw.textbbox((0, 0), line, font=title_font)
-        line_width = bbox[2] - bbox[0]
+        line_width = get_text_width_with_emojis(line, title_font, title_size, draw)
         x = TEXT_AREA_START_X + (TEXT_AREA_WIDTH - line_width) // 2
-        draw.text((x, current_y), line, font=title_font, fill=BROWN)
+        draw_text_with_emojis(img, draw, (x, current_y), line, title_font, emoji_font, title_size, BROWN)
         current_y += line_height
     
     # Ensure output directory exists
