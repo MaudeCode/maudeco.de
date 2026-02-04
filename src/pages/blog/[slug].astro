@@ -27,7 +27,7 @@ function calculateReadingTime(content: string): number {
 const readingTime = calculateReadingTime(post.body)
 
 // OG image path - check if post-specific exists, otherwise use default
-const ogImage = post.data.ogImage ?? `/blog/${post.slug}-og.png`
+const ogImage = post.data.ogImage ?? `/blog/${post.slug}-og.jpg`
 ---
 
 <BaseLayout 

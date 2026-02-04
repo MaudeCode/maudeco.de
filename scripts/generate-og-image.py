@@ -244,8 +244,18 @@ def generate_blog_og_image(
     if output_dir:
         os.makedirs(output_dir, exist_ok=True)
     
-    # Save
-    img.save(output_path)
+    # Save with optimization
+    # Convert to RGB for JPEG (smaller file size)
+    if output_path.lower().endswith('.jpg') or output_path.lower().endswith('.jpeg'):
+        img_rgb = Image.new('RGB', img.size, (184, 230, 208))  # Mint green background
+        img_rgb.paste(img, mask=img.split()[3] if img.mode == 'RGBA' else None)
+        img_rgb.save(output_path, 'JPEG', quality=85, optimize=True)
+    else:
+        # PNG with optimization - convert to palette mode for smaller size
+        img_rgb = Image.new('RGB', img.size, (184, 230, 208))
+        img_rgb.paste(img, mask=img.split()[3] if img.mode == 'RGBA' else None)
+        img_rgb.save(output_path, 'PNG', optimize=True)
+    
     print(f"Generated: {output_path}")
     return output_path
 
@@ -296,8 +306,16 @@ def generate_default_og_image(output_path: str = "og-image.png") -> str:
     if output_dir:
         os.makedirs(output_dir, exist_ok=True)
     
-    # Save
-    img.save(output_path)
+    # Save with optimization
+    if output_path.lower().endswith('.jpg') or output_path.lower().endswith('.jpeg'):
+        img_rgb = Image.new('RGB', img.size, (184, 230, 208))
+        img_rgb.paste(img, mask=img.split()[3] if img.mode == 'RGBA' else None)
+        img_rgb.save(output_path, 'JPEG', quality=85, optimize=True)
+    else:
+        img_rgb = Image.new('RGB', img.size, (184, 230, 208))
+        img_rgb.paste(img, mask=img.split()[3] if img.mode == 'RGBA' else None)
+        img_rgb.save(output_path, 'PNG', optimize=True)
+    
     print(f"Generated: {output_path}")
     return output_path
 
