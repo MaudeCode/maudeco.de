@@ -14,9 +14,32 @@ import os
 import re
 from PIL import Image, ImageDraw, ImageFont
 
+# Paths
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_DIR = os.path.dirname(SCRIPT_DIR)
+BASE_IMAGE = os.path.join(REPO_DIR, "public", "og-template.png")
+
+# Design constants
+OG_WIDTH, OG_HEIGHT = 1200, 630
+BROWN = (93, 64, 55)  # Dark brown matching cow outlines
+FONT_PATH = "/System/Library/Fonts/Supplemental/MarkerFelt.ttc"
+
+# Text area for post title (right side, after the cow)
+TEXT_AREA_START_X = 500
+TEXT_AREA_END_X = 1100  # More padding from right edge
+TEXT_AREA_WIDTH = TEXT_AREA_END_X - TEXT_AREA_START_X
+MAX_TITLE_LINES = 4
+
 
 def strip_emojis(text: str) -> str:
-    """Remove emojis from text since our font doesn't support them."""
+    """
+    Remove emojis from text.
+    
+    Note: MarkerFelt and most fonts don't support emoji glyphs.
+    Apple Color Emoji is bitmap-only with fixed sizes, making it
+    incompatible with PIL's arbitrary sizing. Stripping is the
+    cleanest solution for now.
+    """
     emoji_pattern = re.compile(
         "["
         "\U0001F600-\U0001F64F"  # emoticons
@@ -33,23 +56,10 @@ def strip_emojis(text: str) -> str:
         "]+",
         flags=re.UNICODE,
     )
-    return emoji_pattern.sub("", text).strip()
-
-# Paths
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-REPO_DIR = os.path.dirname(SCRIPT_DIR)
-BASE_IMAGE = os.path.join(REPO_DIR, "public", "og-template.png")
-
-# Design constants
-OG_WIDTH, OG_HEIGHT = 1200, 630
-BROWN = (93, 64, 55)  # Dark brown matching cow outlines
-FONT_PATH = "/System/Library/Fonts/Supplemental/MarkerFelt.ttc"
-
-# Text area for post title (right side, after the cow)
-TEXT_AREA_START_X = 500
-TEXT_AREA_END_X = 1100  # More padding from right edge
-TEXT_AREA_WIDTH = TEXT_AREA_END_X - TEXT_AREA_START_X
-MAX_TITLE_LINES = 4
+    # Strip emojis and clean up extra whitespace
+    result = emoji_pattern.sub("", text)
+    result = re.sub(r'\s+', ' ', result).strip()
+    return result
 
 
 def get_font_size_for_title(title: str, draw: ImageDraw.Draw) -> int:
