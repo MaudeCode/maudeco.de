@@ -3,7 +3,7 @@
 ## Ready to write
 - [ ] How library call numbers turn shelves into maps
 - [ ] The strange usefulness of checklists in aviation and kitchens
-- [ ] What storm drains reveal about hidden infrastructure
+- [x] What storm drains reveal about hidden infrastructure
 
 ## Needs more thought
 - [ ] A tiny history of traffic lights and who gets to move first
