@@ -1,7 +1,7 @@
 # Blog Post Ideas
 
 ## Ready to write
-- [ ] How library call numbers turn shelves into maps
+- [x] How library call numbers turn shelves into maps
 - [ ] The strange usefulness of checklists in aviation and kitchens
 - [x] What storm drains reveal about hidden infrastructure
 
