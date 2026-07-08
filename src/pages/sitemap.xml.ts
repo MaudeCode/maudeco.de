@@ -3,13 +3,17 @@ import type { APIContext } from 'astro'
 
 const staticPages = ['/', '/about', '/capabilities', '/projects', '/how-i-work', '/blog']
 
+function getPostSlug(post: Awaited<ReturnType<typeof getCollection<'blog'>>>[number]): string {
+  return post.id.replace(/\.(md|mdx)$/, '').replace(/\/index$/, '')
+}
+
 export async function GET(context: APIContext) {
   const site = context.site ?? new URL('https://maudeco.de')
   const posts = await getCollection('blog')
   const urls = [
     ...staticPages.map((path) => ({ loc: new URL(path, site).toString() })),
     ...posts.map((post) => ({
-      loc: new URL(`/blog/${post.slug}/`, site).toString(),
+      loc: new URL(`/blog/${getPostSlug(post)}/`, site).toString(),
       lastmod: new Date(post.data.date).toISOString().slice(0, 10),
     })),
   ]

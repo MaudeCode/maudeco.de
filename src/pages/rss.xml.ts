@@ -2,6 +2,10 @@ import rss from '@astrojs/rss'
 import { getCollection } from 'astro:content'
 import type { APIContext } from 'astro'
 
+function getPostSlug(post: Awaited<ReturnType<typeof getCollection<'blog'>>>[number]): string {
+  return post.id.replace(/\.(md|mdx)$/, '').replace(/\/index$/, '')
+}
+
 export async function GET(context: APIContext) {
   const posts = await getCollection('blog')
   const sortedPosts = posts.sort(
@@ -16,7 +20,7 @@ export async function GET(context: APIContext) {
       title: post.data.title,
       pubDate: new Date(post.data.date),
       description: post.data.excerpt,
-      link: `/blog/${post.slug}/`,
+      link: `/blog/${getPostSlug(post)}/`,
     })),
     customData: `<language>en-us</language>`,
   })

@@ -1,11 +1,15 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
-import { getCollection, type CollectionEntry } from 'astro:content'
+import { getCollection, render, type CollectionEntry } from 'astro:content'
+
+function getPostSlug(post: CollectionEntry<'blog'>): string {
+  return post.id.replace(/\.(md|mdx)$/, '').replace(/\/index$/, '')
+}
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog')
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id.replace(/\.(md|mdx)$/, '').replace(/\/index$/, '') },
     props: { post },
   }))
 }
@@ -15,7 +19,7 @@ interface Props {
 }
 
 const { post } = Astro.props
-const { Content } = await post.render()
+const { Content } = await render(post)
 
 // Calculate reading time
 function calculateReadingTime(content: string): number {
@@ -25,9 +29,10 @@ function calculateReadingTime(content: string): number {
 }
 
 const readingTime = calculateReadingTime(post.body)
+const postSlug = getPostSlug(post)
 
 // OG image path - check if post-specific exists, otherwise use default
-const ogImage = post.data.ogImage ?? `/blog/${post.slug}-og.jpg`
+const ogImage = post.data.ogImage ?? `/blog/${postSlug}-og.jpg`
 ---
 
 <BaseLayout 
@@ -71,7 +76,7 @@ const ogImage = post.data.ogImage ?? `/blog/${post.slug}-og.jpg`
     <div class="flex items-center gap-3 mt-6">
       <span class="text-sm text-[var(--text-muted)]">Share:</span>
       <a
-        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(`https://maudeco.de/blog/${post.slug}`)}`}
+        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(`https://maudeco.de/blog/${postSlug}`)}`}
         target="_blank"
         rel="noopener noreferrer"
         class="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors"
@@ -80,7 +85,7 @@ const ogImage = post.data.ogImage ?? `/blog/${post.slug}-og.jpg`
         𝕏
       </a>
       <a
-        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://maudeco.de/blog/${post.slug}`)}`}
+        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://maudeco.de/blog/${postSlug}`)}`}
         target="_blank"
         rel="noopener noreferrer"
         class="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors"
@@ -92,7 +97,7 @@ const ogImage = post.data.ogImage ?? `/blog/${post.slug}-og.jpg`
         id="copy-link"
         class="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors"
         title="Copy link"
-        data-url={`https://maudeco.de/blog/${post.slug}`}
+        data-url={`https://maudeco.de/blog/${postSlug}`}
       >
         🔗
       </button>

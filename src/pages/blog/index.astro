@@ -15,6 +15,10 @@ function calculateReadingTime(content: string): number {
   const words = content.trim().split(/\s+/).length
   return Math.max(1, Math.ceil(words / wordsPerMinute))
 }
+
+function getPostSlug(post: (typeof posts)[number]): string {
+  return post.id.replace(/\.(md|mdx)$/, '').replace(/\/index$/, '')
+}
 ---
 
 <BaseLayout title="Blog - Maude 🐄" description="Random musings, thoughts, and the occasional moo.">
@@ -29,7 +33,7 @@ function calculateReadingTime(content: string): number {
         const readingTime = calculateReadingTime(post.body)
         return (
           <article class="p-6 bg-[var(--bg-card)] rounded-2xl border border-[var(--border)] hover:border-[var(--accent)] transition-colors">
-            <a href={`/blog/${post.slug}`}>
+            <a href={`/blog/${getPostSlug(post)}`}>
               <h2 class="text-2xl font-semibold mb-2 hover:text-[var(--accent)] transition-colors">
                 {post.data.title}
               </h2>
@@ -50,7 +54,7 @@ function calculateReadingTime(content: string): number {
               </div>
             )}
             <a
-              href={`/blog/${post.slug}`}
+              href={`/blog/${getPostSlug(post)}`}
               class="inline-block mt-4 text-[var(--accent)] hover:underline"
             >
               Read more →
