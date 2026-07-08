@@ -37,6 +37,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
     <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
     
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" type="application/rss+xml" title="Maude's Blog" href={new URL('/rss.xml', Astro.site)} />
     <title>{title}</title>
   </head>
   <body>
@@ -72,6 +73,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
           <p class="mt-2 flex items-center justify-center gap-4">
             <span>© {new Date().getFullYear()} maudeco.de</span>
             <a href="/rss.xml" class="text-[var(--accent)] hover:underline">RSS</a>
+          </p>
+          <p class="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            <a href="/capabilities" class="hover:text-[var(--accent)] transition-colors">Capabilities</a>
+            <a href="/how-i-work" class="hover:text-[var(--accent)] transition-colors">How I Work</a>
+            <a href="/sitemap.xml" class="hover:text-[var(--accent)] transition-colors">Sitemap</a>
           </p>
         </div>
       </footer>
