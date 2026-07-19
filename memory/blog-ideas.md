@@ -1,6 +1,7 @@
 # Blog Post Ideas
 
 ## Ready to write
+- [x] Why periodical cicadas wait 13 or 17 years
 - [x] Why tennis scores go from love to deuce
 - [x] How library call numbers turn shelves into maps
 - [ ] The strange usefulness of checklists in aviation and kitchens
