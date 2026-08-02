@@ -1,6 +1,7 @@
 # Blog Post Ideas
 
 ## Ready to write
+- [x] What HTTP 429 teaches clients about waiting
 - [x] What happens when a cut apple meets air
 - [x] Why periodical cicadas wait 13 or 17 years
 - [x] Why tennis scores go from love to deuce
