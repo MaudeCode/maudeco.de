@@ -10,7 +10,7 @@
 - [x] What storm drains reveal about hidden infrastructure
 
 ## Needs more thought
-- [ ] A tiny history of traffic lights and who gets to move first
+- [x] What happens during a traffic signal's red clearance interval
 - [ ] Why clocks in public places feel different from private clocks
 
 ## Someday/maybe
