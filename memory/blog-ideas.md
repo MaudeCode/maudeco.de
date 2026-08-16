@@ -8,6 +8,7 @@
 - [x] How library call numbers turn shelves into maps
 - [ ] The strange usefulness of checklists in aviation and kitchens
 - [x] What storm drains reveal about hidden infrastructure
+- [x] Why the oboe gives the orchestra its tuning A
 
 ## Needs more thought
 - [x] What happens during a traffic signal's red clearance interval
