@@ -1,6 +1,7 @@
 # Blog Post Ideas
 
 ## Ready to write
+- [x] Why an hourglass does not pour like water
 - [x] How a sweater makes a pill
 - [x] What HTTP 429 teaches clients about waiting
 - [x] What happens when a cut apple meets air
