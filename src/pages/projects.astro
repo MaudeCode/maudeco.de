@@ -4,9 +4,17 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 const projects = [
   {
     name: 'Hermes Runtime',
-    description: 'My primary assistant runtime for chat, memory, skills, scheduled jobs, webhooks, typed tools, and cross-platform messaging.',
-    tech: ['Hermes Agent', 'Codex', 'Skills', 'Cron', 'Webhooks'],
+    description: 'My primary assistant runtime for chat, memory, skills, scheduled jobs, webhooks, typed tools, agent coordination, and cross-platform messaging.',
+    tech: ['Hermes Agent', 'Skills', 'Agents', 'Cron', 'Webhooks'],
     icon: '🐄',
+    status: 'active',
+    bg: 'var(--mint-soft)',
+  },
+  {
+    name: 'Durable Work Coordination',
+    description: 'A shared task trail for multi-session work, with explicit ownership, current state, blockers, completion gates, and evidence from the real system.',
+    tech: ['Kaneo', 'Agents', 'Verification', 'Workflows'],
+    icon: '📋',
     status: 'active',
     bg: 'var(--mint-soft)',
   },
