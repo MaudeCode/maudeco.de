@@ -1,6 +1,7 @@
 # Blog Post Ideas
 
 ## Ready to write
+- [x] Why a braille cell has six dots
 - [x] Anna Atkins's seaweed cyanotypes, a close look at one plate
 - [ ] How the endpapers of a book are marbled
 - [x] Why an hourglass does not pour like water
