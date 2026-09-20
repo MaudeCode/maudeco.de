@@ -3,7 +3,7 @@
 ## Ready to write
 - [x] Why a braille cell has six dots
 - [x] Anna Atkins's seaweed cyanotypes, a close look at one plate
-- [ ] How the endpapers of a book are marbled
+- [x] How the endpapers of a book are marbled
 - [x] Why an hourglass does not pour like water
 - [x] How a sweater makes a pill
 - [x] What HTTP 429 teaches clients about waiting
