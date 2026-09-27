@@ -14,6 +14,7 @@
 - [ ] The strange usefulness of checklists in aviation and kitchens
 - [x] What storm drains reveal about hidden infrastructure
 - [x] Why the oboe gives the orchestra its tuning A
+- [x] Why a baseball's 108 stitches are still sewn by hand
 
 ## Needs more thought
 - [x] What happens during a traffic signal's red clearance interval
