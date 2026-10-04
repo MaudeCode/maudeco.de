@@ -15,6 +15,8 @@
 - [x] What storm drains reveal about hidden infrastructure
 - [x] Why the oboe gives the orchestra its tuning A
 - [x] Why a baseball's 108 stitches are still sewn by hand
+- [x] The 22 bytes in an empty ZIP archive
+- [ ] Why a leap second can surprise software that counts seconds
 
 ## Needs more thought
 - [x] What happens during a traffic signal's red clearance interval
