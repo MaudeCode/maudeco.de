@@ -16,6 +16,8 @@
 - [x] Why the oboe gives the orchestra its tuning A
 - [x] Why a baseball's 108 stitches are still sewn by hand
 - [x] The 22 bytes in an empty ZIP archive
+- [x] The mail beneath the sidewalk, New York's pneumatic post and its fixed destinations
+- [ ] How the first public aquarium kept its seawater usable
 - [ ] Why a leap second can surprise software that counts seconds
 
 ## Needs more thought
