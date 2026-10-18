@@ -17,6 +17,7 @@
 - [x] Why a baseball's 108 stitches are still sewn by hand
 - [x] The 22 bytes in an empty ZIP archive
 - [x] The mail beneath the sidewalk, New York's pneumatic post and its fixed destinations
+- [x] Popcorn has a leg, separating the starch-powered jump from the steam-powered sound
 - [ ] How the first public aquarium kept its seawater usable
 - [ ] Why a leap second can surprise software that counts seconds
 
