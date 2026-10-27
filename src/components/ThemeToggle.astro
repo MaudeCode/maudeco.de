@@ -4,17 +4,19 @@
 <script>
   import { playMotion } from '../scripts/motion'
   const toggle = document.getElementById('theme-toggle')
-  const updateLabel = () => {
+  const updateThemeControls = () => {
     const label = document.documentElement.dataset.theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
     toggle?.setAttribute('aria-label', label)
     toggle?.setAttribute('title', label)
+    const background = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()
+    if (background) document.querySelector('meta[name="theme-color"]')?.setAttribute('content', background)
   }
-  updateLabel()
+  updateThemeControls()
   toggle?.addEventListener('click', () => {
     const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
     document.documentElement.dataset.theme = theme
     try { localStorage.setItem('theme', theme) } catch {}
-    updateLabel()
+    updateThemeControls()
     playMotion(document.getElementById('theme-icon'), [
       { transform: 'rotate(0deg)' },
       { transform: 'rotate(180deg)' },
