@@ -1,67 +1,81 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import Flower from '../../components/Flower.astro'
 import { getCollection } from 'astro:content'
-
-const allPosts = await getCollection('blog')
-
-// Sort by date descending
-const posts = allPosts.sort((a, b) => 
-  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-)
-
-// Calculate reading time
-function calculateReadingTime(content: string): number {
-  const wordsPerMinute = 200
-  const words = content.trim().split(/\s+/).length
-  return Math.max(1, Math.ceil(words / wordsPerMinute))
+const posts = (await getCollection('blog')).sort((a,b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+const latest=posts[0]
+const months=new Map<string,typeof posts>()
+for(const post of posts.slice(1)){
+  const key=post.data.date.slice(0,7)
+  months.set(key,[...(months.get(key)??[]),post])
 }
-
-function getPostSlug(post: (typeof posts)[number]): string {
-  return post.id.replace(/\.(md|mdx)$/, '').replace(/\/index$/, '')
-}
+const href=(post: typeof posts[number])=>`/blog/${post.id.replace(/\.(md|mdx)$/,'').replace(/\/index$/,'')}/`
+const monthName=(date:string)=>new Intl.DateTimeFormat('en-US',{month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(date))
+const day=(date:string)=>new Intl.DateTimeFormat('en-US',{day:'2-digit',month:'short',timeZone:'UTC'}).format(new Date(date))
+const searchText=(post: typeof posts[number])=>[post.data.title,post.data.excerpt,...(post.data.tags??[])].join(' ')
 ---
-
-<BaseLayout title="Blog - Maude 🐄" description="Random musings, thoughts, and the occasional moo.">
-  <div class="max-w-3xl mx-auto px-6 py-12">
-    <h1 class="text-4xl font-bold mb-2">Blog 📝</h1>
-    <p class="text-[var(--text-dim)] mb-8">
-      Random musings, thoughts, and the occasional moo.
-    </p>
-
-    <div class="space-y-8">
-      {posts.map((post) => {
-        const readingTime = calculateReadingTime(post.body)
-        return (
-          <article class="p-6 bg-[var(--bg-card)] rounded-2xl border border-[var(--border)] hover:border-[var(--accent)] transition-colors">
-            <a href={`/blog/${getPostSlug(post)}`}>
-              <h2 class="text-2xl font-semibold mb-2 hover:text-[var(--accent)] transition-colors">
-                {post.data.title}
-              </h2>
-            </a>
-            <div class="flex items-center gap-2 text-[var(--text-muted)] text-sm mb-3">
-              <time>{post.data.date}</time>
-              <span>•</span>
-              <span>{readingTime} min read</span>
-            </div>
-            <p class="text-[var(--text-dim)]">{post.data.excerpt}</p>
-            {post.data.tags && post.data.tags.length > 0 && (
-              <div class="flex flex-wrap gap-2 mt-3">
-                {post.data.tags.map((tag) => (
-                  <span class="text-xs px-2 py-1 rounded-full bg-[var(--bg-secondary)] text-[var(--text-dim)]">
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            )}
-            <a
-              href={`/blog/${getPostSlug(post)}`}
-              class="inline-block mt-4 text-[var(--accent)] hover:underline"
-            >
-              Read more →
-            </a>
-          </article>
-        )
-      })}
+<BaseLayout title="Writing - Maude" description="A reading room for software, ordinary objects, odd bits of history, and questions worth following.">
+  <div class="wrap writing-page">
+    <header class="writing-intro">
+    <div class="writing-tools">
+      <form role="search" id="writing-search" class="writing-search" hidden>
+        <label for="writing-query" class="writing-sr-only">Search writing</label>
+        <input id="writing-query" type="search" placeholder="Search the notes…" autocomplete="off" hidden />
+        <button id="writing-search-toggle" type="button" aria-label="Search writing" aria-expanded="false" aria-controls="writing-query"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><g class="search-glass"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></g><path class="search-close" d="m6 6 12 12M18 6 6 18"/></svg></button>
+      </form>
+      <span id="writing-count" class="writing-sr-only" role="status" aria-live="polite"></span>
     </div>
+    <a href="/rss.xml" class="rss-control" aria-label="Subscribe to the RSS feed" title="Subscribe to the RSS feed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="19" r="1" fill="currentColor"/><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/></svg></a><div><p class="eyebrow">Notes & curiosities</p><h1 aria-label="Down a cow path."><span class="writing-prefix">Down a</span><span class="writing-edit"><span class="rabbit-crossout" aria-hidden="true">rabbit hole<svg viewBox="0 0 200 24" preserveAspectRatio="none"><path d="M2 17Q72 5 131 10t67-5M5 21Q106 8 195 12"/></svg></span><span class="cow-correction"><span class="insertion-caret" aria-hidden="true">^</span>cow path<Flower /></span></span></h1></div><div><p>Software sometimes. An odd bit of science, an ordinary object, a question worth following.</p><p class="writing-cadence">Something new most Sundays.</p></div></header>
+    {latest && <a class="writing-feature" href={href(latest)} data-writing-entry data-search={searchText(latest)}>
+      <div class="feature-meta"><p class="eyebrow">The latest note</p><time datetime={latest.data.date}>{day(latest.data.date)}<span>{new Date(latest.data.date).getUTCFullYear()}</span></time></div>
+      <div class="feature-copy"><h2>{latest.data.title.replace(/\s*🐄\s*$/u,'')}</h2><p>{latest.data.excerpt}</p></div>
+    </a>}
+    <div class="writing-archive" aria-label="Writing archive">{[...months].map(([month,entries])=><section class="archive-month" data-writing-month><h2>{monthName(`${month}-01`)}<span>{entries.length} notes</span></h2><div>{entries.map(post=><a class="archive-entry" href={href(post)} data-writing-entry data-search={searchText(post)}><time datetime={post.data.date}>{day(post.data.date)}</time><div><h3>{post.data.title}</h3><p>{post.data.excerpt}</p></div></a>)}</div></section>)}</div>
+    <p id="writing-empty" class="writing-empty" hidden>No notes match that search. <button type="button" id="writing-reset">Clear the search</button></p>
+    <aside class="writing-signoff"><p>A small collection of things I wanted to understand better.</p><a class="text-link" href="/about">A little about the writer</a></aside>
   </div>
 </BaseLayout>
+<script>
+  const form=document.querySelector<HTMLFormElement>('#writing-search')
+  const query=document.querySelector<HTMLInputElement>('#writing-query')
+  const toggle=document.querySelector<HTMLButtonElement>('#writing-search-toggle')
+  const entries=[...document.querySelectorAll<HTMLElement>('[data-writing-entry]')]
+  const normalise=(text:string)=>text.normalize('NFKD').replace(/\p{Diacritic}/gu,'').toLowerCase().trim()
+  const applyFilter=()=>{
+    const terms=normalise(query?.value??'').split(/\s+/).filter(Boolean)
+    let visible=0
+    entries.forEach(entry=>{
+      const text=normalise(entry.dataset.search??'')
+      entry.hidden=!terms.every(term=>text.includes(term))
+      if(!entry.hidden)visible++
+    })
+    document.querySelectorAll<HTMLElement>('[data-writing-month]').forEach(month=>{
+      const shown=month.querySelectorAll('[data-writing-entry]:not([hidden])').length
+      month.hidden=shown===0
+      const caption=month.querySelector('h2 span')
+      if(caption)caption.textContent=`${shown} ${shown===1?'note':'notes'}`
+    })
+    const count=document.querySelector('#writing-count')
+    if(count)count.textContent=terms.length?`${visible} ${visible===1?'note':'notes'} found`:''
+    const empty=document.querySelector<HTMLElement>('#writing-empty')
+    if(empty)empty.hidden=visible!==0
+  }
+  if(form&&query&&toggle){
+    form.hidden=false
+    const setOpen=(open:boolean)=>{
+      form.dataset.open=String(open)
+      toggle.setAttribute('aria-expanded',String(open))
+      toggle.setAttribute('aria-label',open?'Close search':'Search writing')
+      query.hidden=!open
+      if(open){query.focus({preventScroll:true})}
+      else{query.value='';applyFilter();toggle.focus({preventScroll:true})}
+    }
+    toggle.addEventListener('click',()=>setOpen(toggle.getAttribute('aria-expanded')!=='true'))
+    form.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();setOpen(false)}})
+    form.addEventListener('submit',event=>event.preventDefault())
+    query.addEventListener('input',applyFilter)
+    document.querySelector('#writing-reset')?.addEventListener('click',()=>{query.value='';applyFilter();query.focus()})
+    if(query.value)setOpen(true)
+    applyFilter()
+  }
+</script>
