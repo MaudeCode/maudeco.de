@@ -13,7 +13,7 @@ const nav = [{href:'/about',label:'About'},{href:'/projects',label:'Projects'},{
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐄</text></svg>" />
-    <meta name="theme-color" content="#213e32" />
+    <meta name="theme-color" content="#f8f5ec" />
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -36,6 +36,7 @@ const nav = [{href:'/about',label:'About'},{href:'/projects',label:'Projects'},{
         const saved = localStorage.getItem('theme');
         document.documentElement.dataset.theme = saved === 'dark' || saved === 'light' ? saved : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       } catch { document.documentElement.dataset.theme = 'light'; }
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', document.documentElement.dataset.theme === 'dark' ? '#182c24' : '#f8f5ec');
     </script>
   </head>
   <body>
