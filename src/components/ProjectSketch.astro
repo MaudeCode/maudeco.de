@@ -1,0 +1,35 @@
+---
+interface Props { name: string }
+const { name } = Astro.props
+---
+<svg class={`project-sketch sketch-${name.toLowerCase().replaceAll(' ','-')}`} viewBox="0 0 480 280" role="img" aria-label={`${name}, an illustrated view of how the project fits together`}>
+  <path class="sketch-wash" d="M50 64C106 5 224 10 298 36s164 35 151 115-131 125-234 113S-15 148 50 64Z"/>
+  <g class="sketch-lines" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  {name === 'Talaria' && <>
+    <rect class="sketch-paper" x="137" y="47" width="279" height="177" rx="12"/><path d="M137 77h279"/><circle cx="154" cy="62" r="2"/><circle cx="165" cy="62" r="2"/><circle cx="176" cy="62" r="2"/>
+    <rect class="sketch-soft" x="158" y="97" width="80" height="102" rx="4"/><path d="M173 116h45m-45 14h31m-31 23h42m-42 14h29m-29 14h35M258 106h130m-130 13h97m-97 24h112m-112 13h126m-126 24h83"/>
+    <rect class="sketch-paper" x="62" y="96" width="97" height="153" rx="17"/><path d="M95 107h29m-42 26h57m-57 13h37m-37 25h57m-57 13h46m-31 51h18"/>
+    <path class="sketch-accent" d="M302 226q8 25 38 22" stroke-dasharray="3 6"/>
+  </>}
+  {name === 'Kanvil' && <>
+    <path d="M55 80h370M178 80v140M302 80v140"/>
+    <path class="sketch-soft" d="M65 108h99v36H65Zm0 51h99v36H65Zm126-51h97v65h-97Zm125 0h96v36h-96Z"/>
+    <path d="M79 122h62m-62 10h38m-38 40h52m-52 10h67m59-60h58m-58 12h43m-43 12h54"/>
+    <path class="sketch-accent" d="m340 127 8 8 18-19M114 221q125 42 246-9"/>
+    <text x="66" y="64">INBOX</text><text x="190" y="64">IN PROGRESS</text><text x="316" y="64">DONE</text>
+  </>}
+  {name === 'T3 Factory' && <>
+    <path d="M91 142h70q31 0 31-31V83q0-20 27-20h54M161 142q31 0 31 31v25q0 20 27 20h54M294 64h59q25 0 25 25v106q0 23-25 23h-59"/>
+    <circle class="sketch-paper" cx="80" cy="142" r="31"/><path d="M68 132h24m-24 10h24m-24 10h15"/>
+    <circle class="sketch-soft" cx="283" cy="64" r="30"/><circle class="sketch-soft" cx="283" cy="218" r="30"/>
+    <path class="sketch-accent" d="m271 63 8 9 17-19m-25 164 8 9 17-19"/>
+    <text x="47" y="202">QUEUE</text><text x="229" y="123">SEPARATE WORKTREES</text><text x="315" y="265">CHECKED RESULTS</text>
+  </>}
+  {name === 'Cowtail' && <>
+    <path class="sketch-paper" d="M48 62h384v157H48Z"/><path class="sketch-accent" d="M68 131h44l12-33 18 66 16-55 13 22h56"/>
+    <path d="M255 90h151m-151 16h108m-108 27h138m-138 16h116m-116 27h139"/>
+    <path d="M83 246h311" stroke-dasharray="3 7"/><circle class="sketch-soft" cx="83" cy="246" r="7"/><circle class="sketch-soft" cx="238" cy="246" r="7"/><circle class="sketch-accent sketch-paper" cx="394" cy="246" r="7"/>
+    <text x="61" y="271">ALERT</text><text x="198" y="271">INVESTIGATE</text><text x="367" y="271">VERIFY</text>
+  </>}
+  </g>
+</svg>

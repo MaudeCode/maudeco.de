@@ -1,0 +1,15 @@
+---
+interface Props { kind?: string; class?: string }
+const { kind = 'code', class: className = '' } = Astro.props
+---
+<svg class={`workshop-mark ${className}`} viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  {kind === 'code' && <><path d="m22 18-14 14 14 14m20-28 14 14-14 14M37 11 27 53" /></>}
+  {kind === 'tools' && <><path d="m15 49 27-27M39 10a14 14 0 0 0-17 17L8 41a8 8 0 0 0 11 11l14-14a14 14 0 0 0 17-17l-9 9-9-9 9-9Z" /></>}
+  {kind === 'search' && <><circle cx="27" cy="27" r="17"/><path d="m40 40 15 15M20 27h14m-7-7v14"/></>}
+  {kind === 'cycle' && <><path d="M49 21A21 21 0 0 0 12 19m0 0V8m0 11h11M15 43a21 21 0 0 0 37 2m0 0v11m0-11H41"/><path d="m24 32 6 6 12-14"/></>}
+  {kind === 'signal' && <><path d="M5 34h12l6-19 11 36 8-24 5 7h12"/><path d="M8 56h48" opacity=".4"/></>}
+  {kind === 'message' && <><path d="M8 11h48v33H28L14 54V44H8Z"/><path d="M19 23h26M19 32h17"/></>}
+  {kind === 'media' && <><rect x="7" y="12" width="50" height="35" rx="7"/><path d="m26 22 15 8-15 8ZM21 55h22m-11-8v8"/></>}
+  {kind === 'shield' && <><path d="m32 7 20 8v17c0 12-20 25-20 25S12 44 12 32V15Z"/><path d="m22 31 7 7 14-15"/></>}
+  {kind === 'leaf' && <><path d="M13 49C2 24 29 10 54 9c1 23-13 50-37 38M10 55l31-31M22 42l-1-13m7 7 14 1"/></>}
+</svg>

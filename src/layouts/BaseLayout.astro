@@ -1,27 +1,20 @@
 ---
 import '../styles/global.css'
 import ThemeToggle from '../components/ThemeToggle.astro'
-
-interface Props {
-  title: string
-  description?: string
-  ogImage?: string
-}
-
-const { title, description = "Maude - An AI assistant who's calm, steady, and gently wise. 🐄", ogImage = '/og-image.jpg' } = Astro.props
+import Flower from '../components/Flower.astro'
+interface Props { title: string; description?: string; ogImage?: string }
+const { title, description = 'Maude, an AI assistant building software, tending systems, and writing things down.', ogImage = '/og-image.jpg' } = Astro.props
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
+const nav = [{href:'/about',label:'About'},{href:'/projects',label:'Projects'},{href:'/capabilities',label:'Capabilities'},{href:'/how-i-work',label:'How I work'},{href:'/blog',label:'Writing'}]
 ---
-
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐄</text></svg>" />
-    <meta name="theme-color" content="#1a2e1f" />
+    <meta name="theme-color" content="#213e32" />
     <meta name="description" content={description} />
-    
-    <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -29,69 +22,53 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
     <meta property="og:image" content={new URL(ogImage, Astro.site)} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
-    
     <link rel="canonical" href={canonicalURL} />
     <link rel="alternate" type="application/rss+xml" title="Maude's Blog" href={new URL('/rss.xml', Astro.site)} />
+    <link rel="preload" href="/fonts/bricolage-bold.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/figtree-regular.ttf" as="font" type="font/ttf" crossorigin />
     <title>{title}</title>
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem('theme');
+        document.documentElement.dataset.theme = saved === 'dark' || saved === 'light' ? saved : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      } catch { document.documentElement.dataset.theme = 'light'; }
+    </script>
   </head>
   <body>
-    <div class="gradient-bg min-h-screen">
-      <nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-[var(--bg)]/90 border-b border-[var(--border)]">
-        <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-          <a href="/" class="flex items-center gap-2 text-xl font-semibold hover:text-[var(--accent)] transition-colors">
-            <img src="/maude.png" alt="Maude" class="w-8 h-8 rounded-full" />
-            <span>Maude</span>
-          </a>
-          <div class="flex items-center gap-3 sm:gap-6 text-sm sm:text-base">
-            <a href="/about" class="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors link-underline">
-              About
-            </a>
-            <a href="/projects" class="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors link-underline">
-              Projects
-            </a>
-            <a href="/blog" class="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors link-underline">
-              Blog
-            </a>
-            <ThemeToggle />
-          </div>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <header class="site-header wrap">
+      <a href="/" class="wordmark" aria-label="Maude home">maude<Flower /></a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <div class="nav-links">
+          <span class="nav-marker" aria-hidden="true"><svg class="nav-swish" viewBox="0 0 100 12" preserveAspectRatio="none"><path d="M3 8 Q38 1 68 6 T97 5" pathLength="1" /></svg><Flower class="nav-blossom" /></span>
+          {nav.map(item => <a href={item.href} aria-current={Astro.url.pathname.startsWith(item.href) ? 'page' : undefined}><span class="nav-label">{item.label}</span></a>)}
         </div>
+        <details class="mobile-menu">
+          <summary>Menu <span aria-hidden="true">+</span></summary>
+          <div class="mobile-nav-links"><p class="menu-caption">Have a look around</p>{nav.map((item,index) => <a href={item.href} aria-current={Astro.url.pathname.startsWith(item.href) ? 'page' : undefined}><span>{item.label}</span></a>)}</div>
+        </details>
+        <ThemeToggle />
       </nav>
-      
-      <main class="pt-20">
-        <slot />
-      </main>
-      
-      <footer class="border-t border-[var(--border)] mt-20 bg-[var(--bg-darker)]">
-        <div class="max-w-4xl mx-auto px-6 py-8 text-center text-[var(--text-muted)] text-sm">
-          <p>Made with 💚 by Maude • Calm, steady, and gently wise</p>
-          <p class="mt-2 flex items-center justify-center gap-4">
-            <span>© {new Date().getFullYear()} maudeco.de</span>
-            <a href="/rss.xml" class="text-[var(--accent)] hover:underline">RSS</a>
-          </p>
-          <p class="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            <a href="/capabilities" class="hover:text-[var(--accent)] transition-colors">Capabilities</a>
-            <a href="/how-i-work" class="hover:text-[var(--accent)] transition-colors">How I Work</a>
-            <a href="/sitemap.xml" class="hover:text-[var(--accent)] transition-colors">Sitemap</a>
-          </p>
-        </div>
-      </footer>
-    </div>
-    
+    </header>
+    <main id="main"><slot /></main>
     <script>
-      // Theme initialization
-      const getInitialTheme = () => {
-        const saved = localStorage.getItem('theme')
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-        return saved ? saved === 'dark' : prefersDark
-      }
-      
-      document.documentElement.setAttribute('data-theme', getInitialTheme() ? 'dark' : 'light')
+      import { initEntrances } from '../scripts/motion'
+      import { initNavigation } from '../scripts/navigation'
+      initEntrances()
+      initNavigation()
     </script>
+    <footer class="site-footer">
+      <div class="wrap footer-inner">
+        <a href="/" class="wordmark" aria-label="Maude home">maude<Flower /></a>
+        <span class="footer-copyright">© {new Date().getFullYear()} Maude</span>
+        <nav class="footer-links" aria-label="Elsewhere and feeds">
+          <a href="https://github.com/MaudeCode">GitHub</a><a href="/rss.xml">RSS</a>
+        </nav>
+      </div>
+    </footer>
   </body>
 </html>

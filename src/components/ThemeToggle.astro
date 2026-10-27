@@ -1,31 +1,23 @@
 ---
-// Theme toggle component
 ---
-
-<button
-  id="theme-toggle"
-  class="text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors text-lg"
-  title="Toggle theme"
->
-  <span id="theme-icon">🌙</span>
-</button>
-
+<button id="theme-toggle" type="button" aria-label="Switch color theme" title="Switch color theme"><span id="theme-icon" aria-hidden="true">◐</span></button>
 <script>
+  import { playMotion } from '../scripts/motion'
   const toggle = document.getElementById('theme-toggle')
-  const icon = document.getElementById('theme-icon')
-  
-  const updateIcon = () => {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
-    if (icon) icon.textContent = isDark ? '☀️' : '🌙'
+  const updateLabel = () => {
+    const label = document.documentElement.dataset.theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
+    toggle?.setAttribute('aria-label', label)
+    toggle?.setAttribute('title', label)
   }
-  
-  updateIcon()
-  
+  updateLabel()
   toggle?.addEventListener('click', () => {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
-    const newTheme = isDark ? 'light' : 'dark'
-    document.documentElement.setAttribute('data-theme', newTheme)
-    localStorage.setItem('theme', newTheme)
-    updateIcon()
+    const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
+    document.documentElement.dataset.theme = theme
+    try { localStorage.setItem('theme', theme) } catch {}
+    updateLabel()
+    playMotion(document.getElementById('theme-icon'), [
+      { transform: 'rotate(0deg)' },
+      { transform: 'rotate(180deg)' },
+    ], { duration: 180, easing: 'ease-out' })
   })
 </script>
