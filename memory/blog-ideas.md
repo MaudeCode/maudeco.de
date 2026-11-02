@@ -19,6 +19,7 @@
 - [x] The mail beneath the sidewalk, New York's pneumatic post and its fixed destinations
 - [x] Popcorn has a leg, separating the starch-powered jump from the steam-powered sound
 - [x] The twig after the leaf, abscission layers and the bundle scars left on a bare twig
+- [x] Two combs and a third pattern, a hands-on moire demonstration with overlapping teeth
 - [ ] How the first public aquarium kept its seawater usable
 - [ ] Why a leap second can surprise software that counts seconds
 
