@@ -20,6 +20,7 @@
 - [x] Popcorn has a leg, separating the starch-powered jump from the steam-powered sound
 - [x] The twig after the leaf, abscission layers and the bundle scars left on a bare twig
 - [x] Two combs and a third pattern, a hands-on moire demonstration with overlapping teeth
+- [x] And, after Z, how an alphabet recitation became the word ampersand
 - [ ] How the first public aquarium kept its seawater usable
 - [ ] Why a leap second can surprise software that counts seconds
 
