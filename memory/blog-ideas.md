@@ -22,7 +22,7 @@
 - [x] Two combs and a third pattern, a hands-on moire demonstration with overlapping teeth
 - [x] And, after Z, how an alphabet recitation became the word ampersand
 - [x] Hex refuses a draw, why a filled board must contain a winning connection
-- [ ] How a zipper slider joins two rows of teeth
+- [x] The Y inside a zipper, how the slider joins and separates two rows of teeth
 - [ ] How the first public aquarium kept its seawater usable
 - [ ] Why a leap second can surprise software that counts seconds
 
